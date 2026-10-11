@@ -1,0 +1,558 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet><link rel="preconnect" href="https://fonts.googleapis.com"><link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&amp;family=JetBrains+Mono:wght@500&amp;display=swap" rel="stylesheet"><style>body{margin:0;background:#E7E4DD;font-family:'Plus Jakarta Sans',system-ui,sans-serif}a{color:oklch(0.5 0.11 200)}a:hover{color:oklch(0.42 0.11 200)}input,textarea,button{font-family:inherit}::-webkit-scrollbar{width:0;height:0}@keyframes dot{0%,80%,100%{opacity:.25}40%{opacity:1}}</style></helmet>
+<div style="min-height:100vh;display:flex;align-items:center;justify-content:center;gap:56px;padding:40px 24px;box-sizing:border-box;flex-wrap:wrap">
+<div style="max-width:260px;display:flex;flex-direction:column;gap:12px;color:#17191B">
+<div style="font:500 11px 'JetBrains Mono',monospace;letter-spacing:.08em;text-transform:uppercase;color:#5E6266">Prototype · v1</div>
+<div style="font-size:34px;font-weight:800;letter-spacing:-.03em;line-height:1">Halftime</div>
+<div style="font-size:14px;line-height:1.55;color:#4A4E52;text-wrap:pretty">Mental skills and support for high school athletes. Everything is clickable: check in, chat with the AI, run an exercise, open a playbook, read or submit a story. Type something heavy in chat to see the safety response. Switch iOS / Android in Tweaks.</div>
+</div>
+<x-import component-from-global-scope="{{ deviceName }}" from="./ios-frame.jsx ./android-frame.jsx" hint-size="402px,874px">
+<div style="position:relative;height:{{ screenH }};margin-top:{{ shiftTop }};background:#F6F4EF;color:#17191B;font-family:'Plus Jakarta Sans',system-ui,sans-serif;overflow:hidden">
+
+<div ref="{{ scrollRef }}" style="position:absolute;inset:0;overflow-y:auto;padding:62px 0 112px;box-sizing:border-box">
+
+<sc-if value="{{ isHome }}" hint-placeholder-val="{{ true }}">
+<div style="padding:0 20px;display:flex;flex-direction:column;gap:24px">
+<div style="display:flex;flex-direction:column;gap:4px;padding-top:6px">
+<div style="font-size:13px;font-weight:600;color:#5E6266">Mon, Sep 28</div><div style="font-size:32px;font-weight:800;letter-spacing:-.03em">Good morning, Jordan.</div>
+
+</div>
+<div style="background:#fff;border-radius:22px;padding:18px;display:flex;flex-direction:column;gap:14px;border:1px solid rgba(23,25,27,.06)">
+<div style="font-size:17px;font-weight:700;letter-spacing:-.01em">How are you feeling right now?</div>
+<div style="display:grid;grid-template-columns:repeat(5,1fr);gap:6px">
+<sc-for list="{{ moods }}" as="m" hint-placeholder-count="5">
+<button onClick="{{ m.onClick }}" style="border:1px solid {{ m.border }};background:{{ m.bg }};color:{{ m.fg }};border-radius:14px;padding:12px 0 10px;display:flex;flex-direction:column;align-items:center;gap:8px;cursor:pointer;font-size:11px;font-weight:600">
+<span style="width:{{ m.size }};height:{{ m.size }};border-radius:50%;background:{{ m.dot }}"></span>{{ m.label }}</button>
+</sc-for>
+</div>
+<sc-if value="{{ hasMood }}" hint-placeholder-val="{{ false }}">
+<div style="display:flex;flex-direction:column;gap:10px;padding-top:2px">
+<div style="font-size:14px;line-height:1.5;color:#3D4145;text-wrap:pretty">{{ moodReply.text }}</div>
+<div style="display:flex;gap:8px;flex-wrap:wrap">
+<button onClick="{{ moodReply.onPrimary }}" style="border:0;background:#17191B;color:#fff;border-radius:999px;padding:10px 16px;font-size:13px;font-weight:700;cursor:pointer">{{ moodReply.cta }}</button>
+<button onClick="{{ openChatMood }}" style="border:1px solid rgba(23,25,27,.15);background:transparent;color:#17191B;border-radius:999px;padding:10px 16px;font-size:13px;font-weight:600;cursor:pointer">Talk it through</button>
+</div>
+</div>
+</sc-if>
+</div>
+
+
+<button onClick="{{ openHelp }}" style="align-self: flex-start; border: 0; background: oklch(0.55 0.15 30); color: #fff; border-radius: 999px; padding: 10px 16px; font-size: 13px; font-weight: 700; cursor: pointer; width: 100%">Get help now</button><div style="display:flex;flex-direction:column;gap:10px">
+<div style="display:flex;justify-content:space-between;align-items:baseline"><div style="font-size:17px;font-weight:700">Today's plan</div><div style="font:500 12px 'JetBrains Mono',monospace;color:#5E6266">{{ planProgress }}</div></div>
+<div style="background:#fff;border-radius:22px;border:1px solid rgba(23,25,27,.06);overflow:hidden">
+<sc-for list="{{ plan }}" as="p" hint-placeholder-count="3">
+<div style="display:flex;align-items:stretch;border-top:{{ p.divider }}">
+<button onClick="{{ p.onToggle }}" aria-label="Mark complete" style="flex:none;border:0;background:transparent;padding:14px 0 14px 16px;cursor:pointer;display:flex;align-items:center">
+<span style="width:24px;height:24px;border-radius:8px;border:1.5px solid {{ p.boxBorder }};background:{{ p.boxBg }};color:#fff;font-size:13px;font-weight:800;display:flex;align-items:center;justify-content:center">{{ p.check }}</span>
+</button>
+<button onClick="{{ p.onOpen }}" style="flex:1;min-width:0;border:0;background:transparent;display:flex;align-items:center;gap:12px;padding:14px 16px 14px 14px;cursor:pointer;text-align:left;color:#17191B" style-hover="background:rgba(23,25,27,.03)">
+<span style="flex:1;display:flex;flex-direction:column;gap:2px"><span style="font-size:15px;font-weight:600;text-decoration:{{ p.deco }};opacity:{{ p.op }}">{{ p.label }}</span><span style="font-size:12px;color:#5E6266">{{ p.sub }}</span></span>
+<sc-if value="{{ p.hasLink }}" hint-placeholder-val="{{ false }}"><span style="flex:none;width:32px;height:32px;border-radius:50%;background:oklch(0.94 0.03 200);color:oklch(0.42 0.11 200);font-size:16px;font-weight:700;display:flex;align-items:center;justify-content:center">→</span></sc-if>
+</button>
+</div>
+</sc-for>
+</div>
+</div>
+
+<div style="display:flex;flex-direction:column;gap:10px">
+<div style="font-size:17px;font-weight:700">What's going on?</div>
+<div style="display:grid;grid-template-columns:1fr 1fr;gap:10px">
+<sc-for list="{{ playbooks }}" as="pb" hint-placeholder-count="6">
+<button onClick="{{ pb.onOpen }}" style="border:1px solid rgba(23,25,27,.06);background:#fff;border-radius:18px;padding:14px;min-height:104px;display:flex;flex-direction:column;justify-content:space-between;gap:12px;text-align:left;cursor:pointer;color:#17191B">
+<span style="font:500 10px 'JetBrains Mono',monospace;letter-spacing:.06em;text-transform:uppercase;color:oklch(0.48 0.11 200)">{{ pb.tag }}</span>
+<span style="font-size:14px;font-weight:700;line-height:1.3;text-wrap:pretty">{{ pb.title }}</span>
+</button>
+</sc-for>
+</div>
+</div>
+
+<button onClick="{{ featuredStory.onOpen }}" style="border:0;background:#17191B;color:#F6F4EF;border-radius:22px;padding:20px;display:flex;flex-direction:column;gap:10px;text-align:left;cursor:pointer">
+<span style="font:500 10px 'JetBrains Mono',monospace;letter-spacing:.08em;text-transform:uppercase;color:oklch(0.8 0.09 200)">From the locker room</span>
+<span style="font-size:19px;font-weight:700;line-height:1.3;letter-spacing:-.01em;text-wrap:pretty">“{{ featuredStory.title }}”</span>
+<span style="font-size:13px;color:#B9BCBE">{{ featuredStory.byline }}</span>
+</button>
+<div style="display:flex;flex-direction:column;gap:8px;padding:4px 0 8px;border-top:1px solid rgba(23,25,27,.08);padding-top:16px"><div style="padding:0;font-size:11.5px;line-height:1.5;color:#5E6266;text-wrap:pretty">Halftime is a wellness and education app. It is not a therapist, medical provider or crisis service, and it does not diagnose or treat any condition. If you are struggling, talk to a parent, counselor, doctor or licensed mental health professional.</div><div style="display:flex;gap:14px;font-size:11.5px;font-weight:600;color:oklch(0.42 0.11 200)"><span>Terms of Use</span><span>Privacy Policy</span><span>Community Guidelines</span></div></div>
+</div>
+</sc-if>
+
+<sc-if value="{{ isTrain }}" hint-placeholder-val="{{ false }}">
+<div style="padding:0 20px;display:flex;flex-direction:column;gap:20px">
+<div style="display:flex;flex-direction:column;gap:6px;padding-top:6px"><div style="font-size:13px;font-weight:600;color:#5E6266">Mental training</div><div style="font-size:32px;font-weight:800;letter-spacing:-.03em">Train your mind</div><div style="font-size:14px;line-height:1.5;color:#4A4E52;text-wrap:pretty">Where are you right now? Choose a moment to see exercises that fit it.</div></div>
+<div style="display:grid;grid-template-columns:1fr 1fr;gap:10px">
+<sc-for list="{{ situations }}" as="si" hint-placeholder-count="8">
+<button onClick="{{ si.onOpen }}" style="border:1px solid rgba(23,25,27,.06);background:#fff;border-radius:18px;padding:14px;min-height:122px;display:flex;flex-direction:column;justify-content:space-between;gap:10px;text-align:left;cursor:pointer;color:#17191B">
+<span style="font:500 10px 'JetBrains Mono',monospace;letter-spacing:.06em;text-transform:uppercase;color:{{ si.metaColor }}">{{ si.meta }}</span>
+<span style="display:flex;flex-direction:column;gap:4px"><span style="font-size:15px;font-weight:700;line-height:1.25;text-wrap:pretty">{{ si.title }}</span><span style="font-size:12px;line-height:1.4;color:#5E6266;text-wrap:pretty">{{ si.sub }}</span></span>
+</button>
+</sc-for>
+</div>
+</div>
+</sc-if>
+
+<sc-if value="{{ isLearn }}" hint-placeholder-val="{{ false }}">
+<div style="display:flex;flex-direction:column;gap:20px">
+<div style="padding:6px 20px 0;display:flex;flex-direction:column;gap:4px"><div style="font-size:13px;font-weight:600;color:#5E6266">Resources</div><div style="font-size:32px;font-weight:800;letter-spacing:-.03em">Learn</div></div>
+<div style="display:flex;gap:8px;overflow-x:auto;padding:0 20px">
+<sc-for list="{{ cats }}" as="c" hint-placeholder-count="5">
+<button onClick="{{ c.onClick }}" style="flex:none;border:1px solid {{ c.border }};background:{{ c.bg }};color:{{ c.fg }};border-radius:999px;padding:8px 14px;font-size:13px;font-weight:600;cursor:pointer;white-space:nowrap">{{ c.label }}</button>
+</sc-for>
+</div>
+<div style="padding:0 20px;display:flex;flex-direction:column;gap:10px">
+<sc-for list="{{ articles }}" as="a" hint-placeholder-count="4">
+<button onClick="{{ a.onOpen }}" style="border:1px solid rgba(23,25,27,.06);background:#fff;border-radius:18px;padding:16px;display:flex;flex-direction:column;gap:8px;text-align:left;cursor:pointer;color:#17191B">
+<span style="display:flex;gap:10px;font:500 10.5px 'JetBrains Mono',monospace;letter-spacing:.06em;text-transform:uppercase;color:#5E6266"><span style="color:oklch(0.48 0.11 200)">{{ a.cat }}</span>{{ a.read }}</span>
+<span style="font-size:16px;font-weight:700;line-height:1.3;text-wrap:pretty">{{ a.title }}</span>
+<span style="font-size:13px;line-height:1.45;color:#5E6266;text-wrap:pretty">{{ a.dek }}</span>
+</button>
+</sc-for>
+</div>
+</div>
+</sc-if>
+
+<sc-if value="{{ isStories }}" hint-placeholder-val="{{ false }}">
+<div style="padding:0 20px;display:flex;flex-direction:column;gap:20px">
+<div style="display:flex;flex-direction:column;gap:4px;padding-top:6px"><div style="font-size:13px;font-weight:600;color:#5E6266">Real athletes, real seasons</div><div style="font-size:32px;font-weight:800;letter-spacing:-.03em">Stories</div></div>
+<button onClick="{{ openUpload }}" style="border:1.5px dashed rgba(23,25,27,.25);background:transparent;border-radius:20px;padding:18px;display:flex;align-items:center;justify-content:space-between;cursor:pointer;color:#17191B;text-align:left">
+<span style="display:flex;flex-direction:column;gap:3px"><span style="font-size:15px;font-weight:700">Share your story</span><span style="font-size:12.5px;color:#5E6266">Post with your name or anonymously</span></span>
+<span style="width: 36px; height: 36px; border-radius: 50%; background: #17191B; color: #fff; font-size: 22px; display: flex; justify-content: center; text-align: center; position: static; flex-direction: row; align-items: stretch">+</span>
+</button>
+<sc-if value="{{ hasMine }}" hint-placeholder-val="{{ false }}">
+<div style="display:flex;flex-direction:column;gap:8px">
+<div style="font-size:13px;font-weight:700;color:#5E6266">Your submissions</div>
+<sc-for list="{{ myStories }}" as="s" hint-placeholder-count="1">
+<div style="background:#fff;border-radius:16px;padding:14px 16px;display:flex;justify-content:space-between;align-items:center;gap:12px;border:1px solid rgba(23,25,27,.06)"><span style="font-size:14px;font-weight:600">{{ s.title }}</span><span style="flex:none;font-size:11px;font-weight:700;padding:5px 9px;border-radius:999px;background:oklch(0.94 0.04 80);color:oklch(0.42 0.09 80)">In review</span></div>
+</sc-for>
+</div>
+</sc-if>
+<sc-for list="{{ stories }}" as="s" hint-placeholder-count="4">
+<button onClick="{{ s.onOpen }}" style="border:1px solid rgba(23,25,27,.06);background:#fff;border-radius:20px;padding:18px;display:flex;flex-direction:column;gap:10px;text-align:left;cursor:pointer;color:#17191B">
+<span style="display:flex;justify-content:space-between;font-size:12px;font-weight:600;color:#5E6266"><span>{{ s.byline }}</span><span>{{ s.likesLabel }}</span></span>
+<span style="font-size:17px;font-weight:700;line-height:1.3;letter-spacing:-.01em;text-wrap:pretty">{{ s.title }}</span>
+<span style="font-size:13.5px;line-height:1.5;color:#4A4E52;text-wrap:pretty">{{ s.excerpt }}</span>
+</button>
+</sc-for>
+</div>
+</sc-if>
+</div>
+
+<sc-if value="{{ isChat }}" hint-placeholder-val="{{ false }}">
+<div style="position:absolute;inset:0;display:flex;flex-direction:column;padding:56px 0 84px;box-sizing:border-box">
+<div style="padding:8px 20px 12px;display:flex;align-items:center;gap:12px;border-bottom:1px solid rgba(23,25,27,.07)">
+<div style="width:38px;height:38px;border-radius:50%;background:oklch(0.55 0.11 200);display:flex;align-items:center;justify-content:center"><div style="width:14px;height:14px;border-radius:50%;background:#F6F4EF"></div></div>
+<div style="flex:1;display:flex;flex-direction:column;gap:1px"><div style="font-size:16px;font-weight:700">Halftime AI</div><div style="font-size:11.5px;color:#5E6266">Not a therapist. In an emergency, call 911.</div></div>
+</div>
+<div ref="{{ chatRef }}" style="flex:1;overflow-y:auto;padding:16px 16px 8px;display:flex;flex-direction:column;gap:12px">
+<sc-for list="{{ messages }}" as="m" hint-placeholder-count="1">
+<sc-if value="{{ m.isUser }}" hint-placeholder-val="{{ false }}">
+<div style="align-self:flex-end;max-width:78%;background:#17191B;color:#F6F4EF;border-radius:20px 20px 6px 20px;padding:11px 14px;font-size:14.5px;line-height:1.45">{{ m.text }}</div>
+</sc-if>
+<sc-if value="{{ m.isBot }}" hint-placeholder-val="{{ true }}">
+<div style="align-self:flex-start;max-width:86%;display:flex;flex-direction:column;gap:8px">
+<div style="background:#fff;border:1px solid rgba(23,25,27,.06);border-radius:20px 20px 20px 6px;padding:12px 14px;font-size:14.5px;line-height:1.5;text-wrap:pretty;white-space:pre-wrap">{{ m.text }}</div>
+<sc-if value="{{ m.isPlan }}" hint-placeholder-val="{{ false }}">
+<div style="background:oklch(0.94 0.03 200);border-radius:18px;padding:14px;display:flex;flex-direction:column;gap:10px">
+<div style="font:500 10.5px 'JetBrains Mono',monospace;letter-spacing:.06em;text-transform:uppercase;color:oklch(0.42 0.11 200)">Plan · {{ m.planTitle }}</div>
+<sc-for list="{{ m.steps }}" as="st" hint-placeholder-count="3">
+<div style="display:flex;gap:10px;font-size:13.5px;line-height:1.4"><span style="flex:none;font:500 12px 'JetBrains Mono',monospace;color:oklch(0.42 0.11 200);padding-top:1px">{{ st.n }}</span><span>{{ st.text }}</span></div>
+</sc-for>
+<button onClick="{{ m.onSave }}" style="align-self:flex-start;border:0;background:{{ m.saveBg }};color:#fff;border-radius:999px;padding:8px 14px;font-size:12.5px;font-weight:700;cursor:pointer">{{ m.saveLabel }}</button>
+</div>
+</sc-if>
+<sc-if value="{{ m.isLink }}" hint-placeholder-val="{{ false }}">
+<button onClick="{{ m.onLink }}" style="border:1px solid rgba(23,25,27,.1);background:#fff;border-radius:16px;padding:12px 14px;display:flex;align-items:center;justify-content:space-between;gap:12px;cursor:pointer;text-align:left;color:#17191B">
+<span style="display:flex;flex-direction:column;gap:2px"><span style="font:500 10px 'JetBrains Mono',monospace;letter-spacing:.06em;text-transform:uppercase;color:oklch(0.48 0.11 200)">{{ m.linkKind }}</span><span style="font-size:14px;font-weight:700">{{ m.linkTitle }}</span></span>
+<span style="font-size:18px;color:#5E6266">→</span>
+</button>
+</sc-if>
+<sc-if value="{{ m.isCrisis }}" hint-placeholder-val="{{ false }}">
+<div style="background:oklch(0.95 0.03 30);border-radius:18px;padding:14px;display:flex;flex-direction:column;gap:8px">
+<div style="font-size:14px;font-weight:700;color:oklch(0.4 0.13 30)">Reach a real person right now</div>
+<div style="background:oklch(0.55 0.15 30);color:#fff;border-radius:12px;padding:11px 12px;font-size:13.5px;font-weight:700">Call or text 988</div>
+<div style="background:#fff;border-radius:12px;padding:11px 12px;font-size:13.5px;font-weight:600">Text HOME to 741741</div>
+<div style="font-size:12.5px;line-height:1.45;color:#4A4E52">You can also tell your athletic trainer, school counselor, or a parent. If you're in danger, call 911.</div>
+</div>
+</sc-if>
+</div>
+</sc-if>
+</sc-for>
+<sc-if value="{{ typing }}" hint-placeholder-val="{{ false }}">
+<div style="align-self:flex-start;background:#fff;border:1px solid rgba(23,25,27,.06);border-radius:20px;padding:14px 16px;display:flex;gap:5px">{{ typingDots }}</div>
+</sc-if>
+</div>
+<sc-if value="{{ showSuggestions }}" hint-placeholder-val="{{ true }}">
+<div style="display:flex;gap:8px;overflow-x:auto;padding:4px 16px 10px">
+<sc-for list="{{ suggestions }}" as="sg" hint-placeholder-count="3">
+<button onClick="{{ sg.onClick }}" style="flex:none;border:1px solid oklch(0.8 0.06 200);background:oklch(0.97 0.015 200);color:oklch(0.36 0.1 200);border-radius:999px;padding:9px 14px;font-size:13px;font-weight:600;cursor:pointer;white-space:nowrap">{{ sg.label }}</button>
+</sc-for>
+</div>
+</sc-if>
+<div style="padding:0 16px 8px;display:flex;gap:8px;align-items:center">
+<input value="{{ input }}" onChange="{{ onInput }}" onKeyDown="{{ onKey }}" placeholder="What's on your mind?" style="flex:1;min-width:0;border:1px solid rgba(23,25,27,.12);background:#fff;border-radius:999px;padding:13px 16px;font-size:15px;outline:none;color:#17191B">
+<button onClick="{{ onSend }}" style="flex:none;width:46px;height:46px;border-radius:50%;border:0;background:{{ sendBg }};color:#fff;font-size:18px;font-weight:700;cursor:pointer">↑</button>
+</div>
+</div>
+</sc-if>
+
+
+
+<div style="position:absolute;left:0;right:0;bottom:0;z-index:6;height:84px;background:rgba(246,244,239,.94);backdrop-filter:blur(12px);border-top:1px solid rgba(23,25,27,.07);display:grid;grid-template-columns:repeat(5,1fr);padding:8px 8px 0;box-sizing:border-box">
+<sc-for list="{{ tabs }}" as="t" hint-placeholder-count="5">
+<button onClick="{{ t.onClick }}" style="border:0;background:transparent;display:flex;flex-direction:column;align-items:center;gap:6px;padding-top:6px;cursor:pointer;color:{{ t.color }};font-size:11.5px;font-weight:700">
+<span style="width:22px;height:22px;border-radius:{{ t.radius }};border:2px solid {{ t.color }};background:{{ t.fill }};box-sizing:border-box;transform:{{ t.rot }}"></span>{{ t.label }}</button>
+</sc-for>
+</div>
+
+<sc-if value="{{ isSituation }}" hint-placeholder-val="{{ false }}">
+<div style="position:absolute;inset:0;z-index:20;background:#F6F4EF;overflow-y:auto;padding:58px 20px 40px;box-sizing:border-box;display:flex;flex-direction:column;gap:20px">
+<button onClick="{{ closeView }}" style="align-self:flex-start;border:0;background:#fff;border-radius:999px;padding:8px 14px;font-size:13px;font-weight:700;cursor:pointer;color:#17191B">← Train</button>
+<div style="display:flex;flex-direction:column;gap:8px">
+<div style="font:500 11px 'JetBrains Mono',monospace;letter-spacing:.06em;text-transform:uppercase;color:oklch(0.48 0.11 200)">{{ sitView.meta }}</div>
+<div style="font-size:28px;font-weight:800;letter-spacing:-.025em;line-height:1.15;text-wrap:pretty">{{ sitView.title }}</div>
+<div style="font-size:15px;line-height:1.55;color:#4A4E52;text-wrap:pretty">{{ sitView.intro }}</div>
+</div>
+<div style="display:flex;flex-direction:column;gap:10px">
+<sc-for list="{{ sitView.exercises }}" as="ex" hint-placeholder-count="3">
+<button onClick="{{ ex.onStart }}" style="border:1px solid rgba(23,25,27,.06);background:#fff;border-radius:18px;padding:16px;display:flex;align-items:center;gap:14px;text-align:left;cursor:pointer;color:#17191B">
+<span style="flex:none;width:44px;height:44px;border-radius:14px;background:{{ ex.tileBg }};display:flex;align-items:center;justify-content:center;font:500 {{ ex.tileSize }} 'JetBrains Mono',monospace;color:{{ ex.tileFg }}">{{ ex.tileText }}</span>
+<span style="flex:1;display:flex;flex-direction:column;gap:3px"><span style="font-size:15px;font-weight:700">{{ ex.title }}</span><span style="font-size:12.5px;color:#5E6266;line-height:1.4">{{ ex.use }}</span></span>
+<sc-if value="{{ ex.done }}" hint-placeholder-val="{{ false }}"><span style="flex:none;font-size:11px;font-weight:700;padding:5px 9px;border-radius:999px;background:oklch(0.94 0.03 200);color:oklch(0.42 0.11 200)">Done today</span></sc-if>
+<sc-if value="{{ ex.notDone }}" hint-placeholder-val="{{ true }}"><span style="font-size:11px;font-weight:700;color:#5E6266;text-transform:uppercase;letter-spacing:.06em">{{ ex.type }}</span></sc-if>
+</button>
+</sc-for>
+</div>
+<button onClick="{{ sitView.onChat }}" style="border:1px solid rgba(23,25,27,.15);background:transparent;color:#17191B;border-radius:16px;padding:15px;font-size:15px;font-weight:600;cursor:pointer">Talk it through with Halftime AI</button>
+</div>
+</sc-if>
+
+<sc-if value="{{ isPlaybook }}" hint-placeholder-val="{{ false }}">
+<div style="position:absolute;inset:0;z-index:20;background:#F6F4EF;overflow-y:auto;padding:58px 20px 40px;box-sizing:border-box;display:flex;flex-direction:column;gap:20px">
+<button onClick="{{ closeView }}" style="align-self:flex-start;border:0;background:#fff;border-radius:999px;padding:8px 14px;font-size:13px;font-weight:700;cursor:pointer;color:#17191B">← Back</button>
+<div style="display:flex;flex-direction:column;gap:8px">
+<div style="font:500 11px 'JetBrains Mono',monospace;letter-spacing:.06em;text-transform:uppercase;color:oklch(0.48 0.11 200)">Playbook · {{ pbView.tag }} · {{ pbView.time }}</div>
+<div style="font-size:28px;font-weight:800;letter-spacing:-.025em;line-height:1.15;text-wrap:pretty">{{ pbView.title }}</div>
+<div style="font-size:15px;line-height:1.55;color:#4A4E52;text-wrap:pretty">{{ pbView.intro }}</div>
+</div>
+<div style="display:flex;flex-direction:column;gap:10px">
+<sc-for list="{{ pbView.steps }}" as="st" hint-placeholder-count="4">
+<div style="background:#fff;border-radius:18px;padding:16px;display:flex;gap:14px;border:1px solid rgba(23,25,27,.06)">
+<span style="flex:none;width:28px;height:28px;border-radius:50%;background:#17191B;color:#fff;font-size:13px;font-weight:700;display:flex;align-items:center;justify-content:center">{{ st.n }}</span>
+<span style="display:flex;flex-direction:column;gap:4px"><span style="font-size:15px;font-weight:700">{{ st.head }}</span><span style="font-size:13.5px;line-height:1.5;color:#4A4E52;text-wrap:pretty">{{ st.body }}</span></span>
+</div>
+</sc-for>
+</div>
+<div style="display:flex;flex-direction:column;gap:8px">
+<button onClick="{{ pbView.onExercise }}" style="border:0;background:oklch(0.55 0.11 200);color:#fff;border-radius:16px;padding:15px;font-size:15px;font-weight:700;cursor:pointer">Try it now: {{ pbView.exTitle }}</button>
+<button onClick="{{ pbView.onChat }}" style="border:1px solid rgba(23,25,27,.15);background:transparent;color:#17191B;border-radius:16px;padding:15px;font-size:15px;font-weight:600;cursor:pointer">Talk it through with Halftime AI</button>
+</div>
+</div>
+</sc-if>
+
+<sc-if value="{{ isArticle }}" hint-placeholder-val="{{ false }}">
+<div style="position:absolute;inset:0;z-index:20;background:#F6F4EF;overflow-y:auto;padding:58px 22px 40px;box-sizing:border-box;display:flex;flex-direction:column;gap:18px">
+<button onClick="{{ closeView }}" style="align-self:flex-start;border:0;background:#fff;border-radius:999px;padding:8px 14px;font-size:13px;font-weight:700;cursor:pointer;color:#17191B">← Learn</button>
+<div style="font:500 11px 'JetBrains Mono',monospace;letter-spacing:.06em;text-transform:uppercase;color:oklch(0.48 0.11 200)">{{ artView.cat }} · {{ artView.read }}</div>
+<div style="font-size:28px;font-weight:800;letter-spacing:-.025em;line-height:1.15;text-wrap:pretty">{{ artView.title }}</div>
+<sc-for list="{{ artView.body }}" as="para" hint-placeholder-count="3">
+<p style="margin:0;font-size:16px;line-height:1.65;color:#2E3236;text-wrap:pretty">{{ para }}</p>
+</sc-for>
+<div style="background:#fff;border-radius:18px;padding:16px;display:flex;flex-direction:column;gap:6px;border:1px solid rgba(23,25,27,.06)"><div style="font-size:13px;font-weight:700;color:oklch(0.42 0.11 200)">Try this</div><div style="font-size:14.5px;line-height:1.5">{{ artView.tryThis }}</div></div>
+</div>
+</sc-if>
+
+<sc-if value="{{ isStory }}" hint-placeholder-val="{{ false }}">
+<div style="position:absolute;inset:0;z-index:20;background:#F6F4EF;overflow-y:auto;padding:58px 22px 40px;box-sizing:border-box;display:flex;flex-direction:column;gap:18px">
+<button onClick="{{ closeView }}" style="align-self:flex-start;border:0;background:#fff;border-radius:999px;padding:8px 14px;font-size:13px;font-weight:700;cursor:pointer;color:#17191B">← Stories</button>
+<div style="height:200px;border-radius:20px;background:repeating-linear-gradient(135deg,#E6E2D9 0 10px,#EDEAE3 10px 20px);display:flex;align-items:center;justify-content:center;font:500 11px 'JetBrains Mono',monospace;color:#6B6F73">athlete photo</div>
+<div style="font-size:13px;font-weight:600;color:#5E6266">{{ storyView.byline }}</div>
+<div style="font-size:26px;font-weight:800;letter-spacing:-.025em;line-height:1.2;text-wrap:pretty">{{ storyView.title }}</div>
+<sc-for list="{{ storyView.body }}" as="para" hint-placeholder-count="3">
+<p style="margin:0;font-size:16px;line-height:1.65;color:#2E3236;text-wrap:pretty">{{ para }}</p>
+</sc-for>
+<button onClick="{{ storyView.onLike }}" style="align-self:flex-start;border:1px solid {{ storyView.likeBorder }};background:{{ storyView.likeBg }};color:{{ storyView.likeFg }};border-radius:999px;padding:10px 16px;font-size:13.5px;font-weight:700;cursor:pointer">{{ storyView.likeLabel }}</button>
+</div>
+</sc-if>
+
+<sc-if value="{{ isPlayer }}" hint-placeholder-val="{{ false }}">
+<div style="position:absolute;inset:0;z-index:30;background:#17191B;color:#F6F4EF;padding:62px 24px 48px;box-sizing:border-box;display:flex;flex-direction:column;align-items:center;justify-content:space-between">
+<div style="align-self:stretch;display:flex;justify-content:space-between;align-items:center">
+<button onClick="{{ closePlayer }}" style="border:0;background:rgba(246,244,239,.12);color:#F6F4EF;border-radius:999px;padding:8px 14px;font-size:13px;font-weight:700;cursor:pointer">Close</button>
+</div>
+<div style="display:flex;flex-direction:column;align-items:center;gap:6px;text-align:center">
+<div style="font-size:22px;font-weight:800;letter-spacing:-.02em">{{ player.title }}</div>
+<div style="font-size:14px;color:#B9BCBE;max-width:280px;line-height:1.45">{{ player.cue }}</div>
+<div style="font:500 12px 'JetBrains Mono',monospace;color:#B9BCBE;padding-top:6px">Round {{ player.round }} / {{ player.rounds }}</div>
+</div>
+<div style="width:280px;height:280px;display:flex;align-items:center;justify-content:center;position:relative">
+<div style="position:absolute;width:280px;height:280px;border-radius:50%;border:1px solid rgba(246,244,239,.15)"></div>
+<div style="width:280px;height:280px;border-radius:50%;background:oklch(0.55 0.11 200);transform:scale({{ player.scale }});transition:{{ player.transition }}"></div>
+<div style="position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;text-align:center"><div style="font-size:24px;font-weight:800;line-height:1.1;text-align:center;width:100%">{{ player.phase }}</div><div style="font:500 44px/1 'JetBrains Mono',monospace;text-align:center;width:100%;font-variant-numeric:tabular-nums">{{ player.count }}</div></div>
+</div>
+<sc-if value="{{ player.done }}" hint-placeholder-val="{{ false }}">
+<div style="display:flex;flex-direction:column;align-items:center;gap:12px"><div style="font-size:15px;color:#DADCDD">Well done. This session is logged in today's plan.</div><button onClick="{{ closePlayer }}" style="border:0;background:#F6F4EF;color:#17191B;border-radius:999px;padding:14px 28px;font-size:15px;font-weight:700;cursor:pointer">Done</button></div>
+</sc-if>
+<sc-if value="{{ player.notDone }}" hint-placeholder-val="{{ true }}">
+<button onClick="{{ togglePlayer }}" style="border:0;background:#F6F4EF;color:#17191B;border-radius:999px;padding:14px 32px;font-size:15px;font-weight:700;cursor:pointer">{{ player.btn }}</button>
+</sc-if>
+</div>
+</sc-if>
+
+<sc-if value="{{ uploadOpen }}" hint-placeholder-val="{{ false }}">
+<div style="position:absolute;inset:0;z-index:40;background:rgba(23,25,27,.4);display:flex;align-items:flex-end">
+<div style="width:100%;max-height:calc(100% - 108px);overflow-y:auto;background:#F6F4EF;border-radius:28px 28px 0 0;padding:20px 20px 40px;box-sizing:border-box;display:flex;flex-direction:column;gap:16px">
+<div style="display:flex;justify-content:space-between;align-items:center"><div style="font-size:20px;font-weight:800;letter-spacing:-.02em">Share your story</div><button onClick="{{ closeUpload }}" style="border:0;background:#fff;border-radius:999px;padding:7px 12px;font-size:13px;font-weight:700;cursor:pointer;color:#17191B">Cancel</button></div>
+<sc-if value="{{ uploadDone }}" hint-placeholder-val="{{ false }}">
+<div style="display:flex;flex-direction:column;gap:12px;padding:10px 0">
+<div style="width:52px;height:52px;border-radius:50%;background:oklch(0.55 0.11 200);color:#fff;font-size:24px;font-weight:800;display:flex;align-items:center;justify-content:center">✓</div>
+<div style="font-size:18px;font-weight:700">Sent for review</div>
+<div style="font-size:14.5px;line-height:1.55;color:#4A4E52">A Halftime moderator reads every story before it goes live, usually within 24 hours. We'll let you know when it's posted.</div>
+<button onClick="{{ closeUpload }}" style="border:0;background:#17191B;color:#fff;border-radius:16px;padding:15px;font-size:15px;font-weight:700;cursor:pointer">Back to stories</button>
+</div>
+</sc-if>
+<sc-if value="{{ uploadForm }}" hint-placeholder-val="{{ true }}">
+<div style="display:flex;flex-direction:column;gap:6px"><label style="font-size:13px;font-weight:700">Title</label><input value="{{ up.title }}" onChange="{{ up.onTitle }}" placeholder="e.g. The season I almost quit" style="border:1px solid {{ up.titleBorder }};background:#fff;border-radius:14px;padding:13px 14px;font-size:15px;outline:none;color:#17191B"><sc-if value="{{ up.titleErr }}" hint-placeholder-val="{{ false }}"><div style="font-size:12px;color:oklch(0.5 0.15 30)">Add a title (4+ characters).</div></sc-if></div>
+<div style="display:flex;flex-direction:column;gap:8px"><label style="font-size:13px;font-weight:700">Sport</label><div style="display:flex;gap:6px;flex-wrap:wrap">
+<sc-for list="{{ up.sports }}" as="sp" hint-placeholder-count="6"><button onClick="{{ sp.onClick }}" style="border:1px solid {{ sp.border }};background:{{ sp.bg }};color:{{ sp.fg }};border-radius:999px;padding:7px 12px;font-size:12.5px;font-weight:600;cursor:pointer">{{ sp.label }}</button></sc-for>
+</div></div>
+<div style="display:flex;flex-direction:column;gap:6px"><label style="font-size:13px;font-weight:700">Your story</label><textarea value="{{ up.body }}" onChange="{{ up.onBody }}" rows="6" placeholder="What happened, how it felt, what helped." style="border:1px solid {{ up.bodyBorder }};background:#fff;border-radius:14px;padding:13px 14px;font-size:15px;line-height:1.5;outline:none;resize:none;color:#17191B"></textarea><div style="display:flex;justify-content:space-between;font-size:12px;color:#5E6266"><span style="color:{{ up.bodyHintColor }}">At least 40 characters</span><span>{{ up.count }}</span></div></div>
+<div style="height:96px;border-radius:14px;border:1.5px dashed rgba(23,25,27,.2);background:repeating-linear-gradient(135deg,#EEEBE4 0 10px,#F3F1EB 10px 20px);display:flex;align-items:center;justify-content:center;font:500 11px 'JetBrains Mono',monospace;color:#6B6F73">optional photo · drop here</div>
+<button onClick="{{ up.onAnon }}" style="border:0;background:#fff;border-radius:14px;padding:14px;display:flex;justify-content:space-between;align-items:center;cursor:pointer;color:#17191B;text-align:left">
+<span style="display:flex;flex-direction:column;gap:2px"><span style="font-size:14.5px;font-weight:700">Post anonymously</span><span style="font-size:12px;color:#5E6266">Only your sport is shown</span></span>
+<span style="width:46px;height:28px;border-radius:14px;background:{{ up.toggleBg }};position:relative;transition:background .2s"><span style="position:absolute;top:3px;left:{{ up.knob }};width:22px;height:22px;border-radius:50%;background:#fff;transition:left .2s;box-shadow:0 1px 3px rgba(0,0,0,.2)"></span></span>
+</button>
+<button onClick="{{ up.onSubmit }}" style="border:0;background:#17191B;color:#fff;border-radius:16px;padding:15px;font-size:15px;font-weight:700;cursor:pointer">Submit for review</button>
+</sc-if>
+</div>
+</div>
+</sc-if>
+
+<sc-if value="{{ helpOpen }}" hint-placeholder-val="{{ false }}">
+<div onClick="{{ closeHelp }}" style="position:absolute;inset:0;z-index:50;background:rgba(23,25,27,.45);display:flex;align-items:flex-end">
+<div onClick="{{ stop }}" style="width:100%;background:#F6F4EF;border-radius:28px 28px 0 0;padding:22px 20px 42px;box-sizing:border-box;display:flex;flex-direction:column;gap:12px">
+<div style="font-size:22px;font-weight:800;letter-spacing:-.02em">You don't have to handle this alone.</div>
+<div style="font-size:14px;line-height:1.5;color:#4A4E52">Free, confidential, 24/7. Real people, not a bot.</div>
+<div style="background:oklch(0.55 0.15 30);color:#fff;border-radius:16px;padding:16px;display:flex;flex-direction:column;gap:2px"><span style="font-size:16px;font-weight:800">Call or text 988</span><span style="font-size:12.5px">Suicide &amp; Crisis Lifeline</span></div>
+<div style="background:#fff;border-radius:16px;padding:16px;display:flex;flex-direction:column;gap:2px"><span style="font-size:16px;font-weight:700">Text HOME to 741741</span><span style="font-size:12.5px;color:#5E6266">Crisis Text Line</span></div>
+<div style="background:#fff;border-radius:16px;padding:16px;display:flex;flex-direction:column;gap:2px"><span style="font-size:16px;font-weight:700">Message a trusted adult</span><span style="font-size:12.5px;color:#5E6266">Coach Rivera · Ms. Okafor (counselor) · Mom</span></div>
+<div style="font-size:13px;font-weight:600;text-align:center;color:#4A4E52;padding-top:4px">In immediate danger? Call 911.</div>
+</div>
+</div>
+</sc-if>
+
+<sc-if value="{{ needsConsent }}" hint-placeholder-val="{{ false }}">
+<div style="position:absolute;inset:0;z-index:80;background:#F6F4EF;overflow-y:auto;padding:72px 24px 44px;box-sizing:border-box;display:flex;flex-direction:column;gap:16px">
+<div style="font:500 11px 'JetBrains Mono',monospace;letter-spacing:.08em;text-transform:uppercase;color:oklch(0.48 0.11 200)">Before you start</div>
+<div style="font-size:28px;font-weight:800;letter-spacing:-.025em;line-height:1.15">A few things to know about Halftime</div>
+<sc-for list="{{ consentPoints }}" as="c" hint-placeholder-count="4">
+<div style="display:flex;gap:12px;background:#fff;border-radius:16px;padding:14px;border:1px solid rgba(23,25,27,.06)"><span style="flex:none;width:8px;height:8px;border-radius:50%;background:oklch(0.55 0.11 200);margin-top:7px"></span><span style="display:flex;flex-direction:column;gap:3px"><span style="font-size:14.5px;font-weight:700">{{ c.h }}</span><span style="font-size:13px;line-height:1.5;color:#4A4E52">{{ c.b }}</span></span></div>
+</sc-for>
+<sc-for list="{{ consentChecks }}" as="c" hint-placeholder-count="2">
+<button onClick="{{ c.onClick }}" style="border:0;background:transparent;display:flex;gap:12px;align-items:flex-start;text-align:left;cursor:pointer;padding:2px 0;color:#17191B"><span style="flex:none;width:22px;height:22px;border-radius:7px;border:1.5px solid {{ c.border }};background:{{ c.bg }};color:#fff;font-size:12px;font-weight:800;display:flex;align-items:center;justify-content:center">{{ c.mark }}</span><span style="font-size:13.5px;line-height:1.45">{{ c.label }}</span></button>
+</sc-for>
+<button onClick="{{ acceptConsent }}" style="border:0;background:{{ consentBg }};color:#fff;border-radius:16px;padding:15px;font-size:15px;font-weight:700;cursor:{{ consentCursor }}">Continue</button>
+<div style="display:flex;gap:14px;font-size:11.5px;font-weight:600;color:oklch(0.42 0.11 200)"><span>Terms of Use</span><span>Privacy Policy</span></div>
+</div>
+</sc-if>
+</div>
+</x-import>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"platform":{"editor":"enum","options":["iOS","Android"],"default":"iOS","tsType":"string"}}'>
+const PLAYBOOKS=[
+{id:'pregame',tag:'Pre-game',time:'5 min',title:'Nerves before a big game',intro:'Feeling nervous before a game that matters is normal. The aim is to guide that energy gently, not to make it disappear.',ex:'box',steps:[['Name it','Say to yourself: “I\'m nervous because this matters.” Naming a feeling lowers its intensity.'],['Breathe square','Four rounds of box breathing slows your heart rate and gives your brain a clear job.'],['Pick one cue','Choose one word for the game, like “first touch” or “loud feet.” Come back to it when your mind races.'],['Control the controllables','Warm-up, effort, communication. Let go of refs, scores, and who\'s in the stands.']]},
+{id:'mistake',tag:'In-game',time:'30 sec',title:'Bounce back from a mistake',intro:'Great athletes make mistakes all game. What sets them apart is how fast they reset.',ex:'reset',steps:[['Physical flush','Wipe your hands on your shorts or tap your chest. A small action tells your brain “that play is over.”'],['One breath','In through the nose, long exhale through the mouth.'],['Next-play cue','Say “next play” and lock your eyes on something specific: the ball, your mark, the net.']]},
+{id:'loss',tag:'Post-game',time:'10 min',title:'After a tough loss',intro:'It\'s normal to feel wrecked after a loss. Give yourself a window to feel it before you analyze it.',ex:'body',steps:[['Set a 24-hour rule','Feel whatever you feel tonight. Film and fixes can wait until tomorrow.'],['Separate you from the result','You lost a game. You are not a loser. Write down one thing you did well.'],['Refuel and sleep','Eat something real and aim for 8+ hours. A tired brain makes everything look worse.'],['Pick one lesson','Tomorrow, choose one thing to work on. Just one.']]},
+{id:'coach',tag:'Team',time:'8 min',title:'When a coach is hard on you',intro:'Tough feedback can sting. Figure out what\'s useful, what isn\'t, and when to speak up.',ex:'box',steps:[['Cool down first','Don\'t respond in the heat of the moment. Take a breath and a day if you need it.'],['Find the note','Pull out the specific skill they\'re asking for. Tone aside, is there something to use?'],['Ask for a minute','“Coach, can I get 5 minutes after practice to understand what you want from me?”'],['Know the line','Yelling about effort is different from insults or threats. If it feels like the second, tell a parent or counselor.']]},
+{id:'injury',tag:'Recovery',time:'10 min',title:'Sidelined by injury',intro:'Injury can feel like losing part of who you are. Staying connected to your team and your goals helps.',ex:'visual',steps:[['Grieve it','Feeling angry or sad is part of recovery. It doesn\'t mean you\'re weak.'],['Stay on the team','Go to practice when you can. Help with film, stats, or cheering.'],['Train your mind','Visualization keeps skill pathways active while your body heals.'],['Track small wins','Range of motion, rehab sessions finished. Progress is progress.']]},
+{id:'balance',tag:'Life',time:'6 min',title:'School and sport overload',intro:'Practice, homework, games, friends. When everything feels urgent, make it smaller.',ex:'body',steps:[['Brain dump','Write every task down. It\'s easier to see than to hold in your head.'],['Pick the top three','What absolutely has to happen today? Start there.'],['Protect sleep','Sleep is training. Cutting it to cram usually backfires.'],['Say something','Teachers and coaches can adjust deadlines if they know early.']]}];
+const EXERCISES=[
+{id:'box',title:'Box breathing',type:'Breath',mins:4,use:'Calm pre-game nerves in four rounds',cue:'Follow the circle. Breathe through your nose.',rounds:4,pattern:[['Inhale',4,1],['Hold',4,1],['Exhale',4,.55],['Hold',4,.55]]},
+{id:'reset',title:'Next-play reset',type:'Focus',mins:1,use:'Let go of a mistake and lock back in',cue:'Flush the last play. Find your cue word.',rounds:3,pattern:[['Breathe in',3,1],['Flush it',3,.55],['Next play',3,.8]]},
+{id:'visual',title:'Game-day visualization',type:'Imagery',mins:6,use:'Rehearse your best performance in detail',cue:'Close your eyes. See it, hear it, feel it.',rounds:3,pattern:[['See it',6,.8],['Feel it',6,1],['Own it',6,.9]]},
+{id:'body',title:'Body scan for recovery',type:'Recovery',mins:8,use:'Unwind tension after practice or before sleep',cue:'Move your attention slowly from feet to head.',rounds:3,pattern:[['Notice',5,.9],['Soften',5,.7],['Release',5,.55]]},
+{id:'cue',title:'Confidence cue words',type:'Self-talk',mins:3,use:'Swap “don\'t mess up” for a word that works',cue:'Pick one word. Say it on every exhale.',rounds:4,pattern:[['Breathe in',4,1],['Say your word',4,.6]]}];
+const EXTRA_EX=[
+{id:'ground',title:'5-4-3-2-1 grounding',type:'Grounding',mins:1,use:'Come back to the present when your mind races',cue:'Notice what is around you, one sense at a time.',rounds:1,pattern:[['5 things you see',8,.9],['4 things you feel',8,.8],['3 things you hear',8,.7],['2 things you smell',8,.6],['1 slow breath',8,.5]]},
+{id:'478',title:'4-7-8 breathing',type:'Breath',mins:2,use:'Slow your body down before sleep',cue:'In through your nose, out through your mouth.',rounds:4,pattern:[['Inhale',4,1],['Hold',7,1],['Exhale',8,.55]]},
+{id:'reflect',title:'Post-game reflection',type:'Reflection',mins:1,use:'Process the game without replaying every mistake',cue:'Answer each prompt quietly to yourself.',rounds:1,pattern:[['One thing that went well',15,.8],['One thing to work on',15,.7],['Let the rest go',15,.55]]},
+{id:'focus',title:'Focus drill',type:'Focus',mins:1,use:'Sharpen attention before a drill or rep',cue:'Pick one spot. Keep your eyes and mind there.',rounds:3,pattern:[['Narrow',5,.6],['Hold focus',5,.6],['Widen',5,1]]}];
+EXERCISES.push(...EXTRA_EX);
+const SITUATIONS=[
+{id:'practice',title:'At practice',sub:'Stay focused and bounce back between reps',intro:'Practice is where mental skills get built. Use these between drills or during water breaks.',ex:['focus','reset','cue']},
+{id:'daybefore',title:'Day before a game',sub:'Prepare your mind and rest well',intro:'The night before, the goal is to feel prepared and get good sleep, not to replay every scenario.',ex:['visual','body','478']},
+{id:'gameday',title:'Game day',sub:'Before kickoff and between plays',intro:'Nerves on game day are normal. Use the longer exercises before the game and the quick resets during it, even on the field or bench.',ex:['box','cue','ground','reset']},
+{id:'after',title:'After a game',sub:'Process the result, win or lose',intro:'Give yourself space to feel the result before you analyze it.',ex:['reflect','body','478']},
+{id:'injured',title:'Injured or sidelined',sub:'Stay connected while you heal',intro:'Recovery affects your mind as well as your body. These support you while you are off the field.',ex:['visual','ground','body']},
+{id:'sleep',title:'Can\'t sleep',sub:'Slow your body and quiet your mind',intro:'A racing mind makes sleep hard. These help your body shift into rest.',ex:['478','body']},
+{id:'stressed',title:'Stressed or overwhelmed',sub:'School, family, friends, everything',intro:'When everything feels like too much, start by coming back to the present moment.',ex:['ground','box','478']}];
+const ARTICLES=[
+{id:'a1',cat:'Performance anxiety',read:'4 min',title:'Why your heart pounds before games, and how to use it',dek:'Nerves and excitement are the same body signals. The difference is the story you tell.',body:['Before a big game your body releases adrenaline. Your heart speeds up, your breathing gets shallow, your hands might shake. This is your body preparing to perform.','Research on athletes shows that telling yourself “I\'m excited” instead of “calm down” tends to improve performance. You\'re not fighting the feeling, you\'re giving it a job.','If the feeling tips into panic, slow your exhale. A long breath out is the fastest way to signal safety to your nervous system.'],tryThis:'Next time you feel nerves, say out loud: “My body is getting ready.” Then take three slow exhales.'},
+{id:'a2',cat:'Sleep & recovery',read:'3 min',title:'Sleep is part of training',dek:'Teens need 8 to 10 hours. Here\'s what changes when you get it.',body:['During deep sleep your body repairs muscle and your brain locks in the skills you practiced that day.','Athletes who sleep less than 8 hours report more injuries and slower reaction times. Mood takes a hit too.','Screens before bed delay the sleep signal in your brain. Try putting your phone across the room 30 minutes before lights out.'],tryThis:'Pick a fixed lights-out time for the next five nights and log how you feel at practice.'},
+{id:'a3',cat:'Confidence',read:'5 min',title:'Self-talk that actually works',dek:'“Don\'t miss” keeps the miss in your head. Instructional cues work better.',body:['Your brain struggles with “don\'t.” Telling yourself not to miss often puts the picture of missing front and center.','Instructional self-talk names what to do: “eyes up,” “follow through,” “quick feet.” Motivational self-talk builds energy: “I\'ve got this,” “attack.”','Pick one of each and practice them in training so they\'re automatic in games.'],tryThis:'Write down one instructional cue and one motivational cue for your sport. Use them at your next practice.'},
+{id:'a4',cat:'Burnout',read:'4 min',title:'Signs you\'re running on empty',dek:'Dreading practice, constant tiredness, and losing the fun can all point to burnout.',body:['Burnout builds slowly. You might notice you don\'t care about games you used to love, or you feel exhausted even after rest.','It\'s not a character flaw. It usually means the load has been too high for too long without real recovery.','Talking to a coach, trainer, or parent early can lead to small changes, like a rest day, that make a big difference.'],tryThis:'Rate your energy, mood, and motivation 1–5 each day this week. Share the pattern with someone you trust.'},
+{id:'a5',cat:'Talking to adults',read:'3 min',title:'How to bring up mental health with your coach',dek:'A short script for a hard conversation.',body:['Coaches want their athletes healthy, but they can\'t help with what they don\'t know about.','Pick a calm moment, not right after a game. Keep it simple: what you\'ve noticed, how it affects you, and what might help.','Example: “I\'ve been really anxious before games and it\'s messing with my focus. Can we talk about it?”'],tryThis:'Draft your first sentence here in the chat. Halftime AI can help you practice.'}];
+const STORIES=[
+{id:'s1',byline:'Maya, 16 · Soccer',title:'I froze on a penalty kick in front of everyone',likes:214,excerpt:'The whole bench was watching. I missed by a mile. What I did the next week changed how I play.',body:['It was the county semifinal and coach picked me to take the PK. I remember my legs feeling like they weren\'t mine.','I missed. Badly. For a week I replayed it every night. I didn\'t want to go to practice.','My trainer taught me a reset: wipe my hands, one breath, say “next ball.” I practiced it every time I messed up in drills, so it became automatic.','Two weeks later I took another PK. I was still nervous. I scored anyway.']},
+{id:'s2',byline:'Anonymous · Wrestling',title:'Cutting weight was messing with my head',likes:167,excerpt:'I thought being irritable and exhausted was just part of the sport. It wasn\'t.',body:['Sophomore year I was cutting hard every week. I was snapping at my family and couldn\'t focus in class.','I finally told the athletic trainer how I was feeling. She got the team nutritionist involved and we made a real plan.','I moved up a weight class. I lost a few matches. I also started sleeping again and actually liked wrestling.']},
+{id:'s3',byline:'Dev, 17 · Basketball',title:'Tearing my ACL made me figure out who I am without ball',likes:302,excerpt:'Nine months off. The hardest part wasn\'t the rehab.',body:['When the doctor said nine months, I felt like my whole identity was gone.','The first month I stopped going to games. Seeing the team without me was too much.','My counselor pushed me to show up and help with film. Being useful kept me connected.','I\'m back now. I\'m also the guy teammates come to when they\'re hurt, and I\'m proud of that.']},
+{id:'s4',byline:'Anonymous · Track',title:'My parents cared more about my times than me',likes:128,excerpt:'Learning to separate my worth from my PRs.',body:['Every car ride home was about my splits. I started to hate racing.','I wrote my parents a letter because I couldn\'t say it out loud. It was awkward, but they listened.','Now we have a rule: no race talk until I bring it up.']}];
+const MOODS=[['Drained','oklch(0.62 0.06 260)'],['Tense','oklch(0.62 0.12 30)'],['Okay','oklch(0.75 0.06 90)'],['Good','oklch(0.62 0.1 160)'],['Locked in','oklch(0.55 0.11 200)']];
+const MOOD_REPLY={
+Drained:['Thank you for telling me. Low-energy days happen, especially in-season. A slow body scan may help you recover before practice.','body','Body scan · 8 min'],
+Tense:['Thank you for checking in. Tension before a big week is common. A few minutes of slow breathing can help your body settle.','box','Box breathing · 4 min'],
+Okay:['Thank you for checking in. A short visualization now can help you arrive at practice with a clear plan.','visual','Visualization · 6 min'],
+Good:['Good to hear. Steady days are a helpful time to practise skills you can rely on later, like cue words.','cue','Cue word practice · 3 min'],
+'Locked in':['Good to hear. Take a moment to notice what helped you feel this way, so you can return to it before Friday.','visual','Visualization · 6 min']};
+const CATS=['All','Performance anxiety','Sleep & recovery','Confidence','Burnout','Talking to adults'];
+const SPORTS=['Soccer','Basketball','Football','Track','Swim','Volleyball','Wrestling','Other'];
+const RISK=/(kill myself|suicid|end it all|want to die|don.?t want to be here|hurt myself|self.?harm|cutting myself|no reason to live)/i;
+const START_SUGG=['I\'m nervous about Friday\'s game','I can\'t stop replaying a mistake','Make me a pre-game plan','How do I talk to my coach?'];
+
+function respond(t){
+  const s=t.toLowerCase();
+  if(/plan|routine|prepare|ready/.test(s)) return {text:'Here is a gentle pre-game plan for Friday. You can adjust any step, and I can remind you on game day.',card:{type:'plan',title:'Friday pre-game',steps:['Night before: phone away by 10, lay out your gear','Morning: 4 min box breathing','Warm-up: pick one cue word, like “first touch”','Tunnel: one long exhale, then say your cue']},sugg:['What if I still feel nervous?','Give me a cue word','What should I eat?']};
+  if(/nerv|anx|scared|pressure|big game|friday|worried/.test(s)) return {text:'That is an understandable feeling when something matters to you. Nervousness is your body preparing, and we can help guide that energy.\n\nWould you like to try a four-minute breathing exercise now, or build a plan for Friday together?',card:{type:'exercise',id:'box'},sugg:['Make me a pre-game plan','What if I freeze during the game?','Why does my stomach hurt before games?']};
+  if(/mistake|replay|messed|missed|error|choke|froze|freeze/.test(s)) return {text:'Replaying a mistake is the mind\'s way of trying to protect you, but it can keep you in the past. A short physical reset can help you return to the present. It takes about 30 seconds.',card:{type:'exercise',id:'reset'},sugg:['How do I stop overthinking after games?','Read a story about this','Make me a pre-game plan']};
+  if(/coach|yell|bench|playing time/.test(s)) return {text:'Difficulties with a coach can be very stressful. It helps to separate the feedback from the delivery, then ask for a short one-on-one when things are calm. Here\'s a playbook for it.',card:{type:'playbook',id:'coach'},sugg:['Help me write what to say','What if my coach won\'t listen?']};
+  if(/injur|acl|sprain|concussion|sidelined|rehab/.test(s)) return {text:'Being hurt is hard in ways people don\'t always see. Feeling frustrated or left out is really common. This playbook covers staying connected while you heal.',card:{type:'playbook',id:'injury'},sugg:['Visualization while injured','How do I stay part of the team?']};
+  if(/lost|loss|lose/.test(s)) return {text:'Losses can hurt, especially when you gave your best. It is okay to let yourself feel it tonight. Tomorrow we can look for one lesson together.',card:{type:'playbook',id:'loss'},sugg:['I feel like I let the team down','Help me sleep tonight']};
+  if(/sleep|tired|exhaust|burn/.test(s)) return {text:'Being worn down makes everything harder, including focus and mood. A body scan before bed can help you wind down. If this has been going on for weeks, it\'s worth telling your trainer.',card:{type:'exercise',id:'body'},sugg:['Signs of burnout','How much sleep do I need?']};
+  return {text:'Thank you for sharing that. Could you tell me a little more about what is happening? Is it related to a game, practice, school, or something else?',sugg:['It\'s about a game','It\'s school stuff','I just feel off']};
+}
+
+class Component extends DCLogic {
+  state={consented:false,agree:{},tab:'home',view:null,mood:null,planDone:{p1:true},savedPlans:{},messages:[{role:'bot',text:'Hi Jordan. I\'m Halftime AI. You can talk with me about game nerves, practice, coaches, school, or anything that is weighing on you. What is on your mind today?',sugg:START_SUGG}],input:'',typing:false,helpOpen:false,player:null,learnCat:'All',uploadOpen:false,uploadDone:false,up:{title:'',body:'',sport:'Soccer',anon:false},upTried:false,myStories:[],liked:{}};
+  scrollRef=React.createRef(); chatRef=React.createRef();
+  componentDidUpdate(pp,ps){
+    if(ps.tab!==this.state.tab&&this.scrollRef.current) this.scrollRef.current.scrollTop=0;
+    const c=this.chatRef.current;
+    if(c&&(ps.messages.length!==this.state.messages.length||ps.typing!==this.state.typing||ps.tab!==this.state.tab)) c.scrollTop=c.scrollHeight;
+  }
+  componentWillUnmount(){clearInterval(this.timer)}
+  go(tab){this.setState({tab,view:null})}
+  startEx(id){
+    const ex=EXERCISES.find(e=>e.id===id);clearInterval(this.timer);
+    this.setState(x=>({view:x.view&&x.view.type==='situation'?x.view:null,player:{id,step:0,count:ex.pattern[0][1],round:1,running:false,done:false,scale:.55}}));
+  }
+  togglePlayer(){
+    const p=this.state.player;if(!p)return;
+    if(p.running){clearInterval(this.timer);this.setState({player:{...p,running:false}});return;}
+    const ex=EXERCISES.find(e=>e.id===p.id);
+    this.setState({player:{...p,running:true,scale:ex.pattern[p.step][2]}});
+    this.timer=setInterval(()=>{
+      const q=this.state.player;if(!q)return clearInterval(this.timer);
+      if(q.count>1)return this.setState({player:{...q,count:q.count-1}});
+      let step=q.step+1,round=q.round;
+      if(step>=ex.pattern.length){step=0;round++;}
+      if(round>ex.rounds){clearInterval(this.timer);return this.setState(s=>({player:{...q,done:true,running:false,count:0,scale:.55},planDone:{...s.planDone,p2:true},completed:{...(s.completed||{}),[q.id]:true}}));}
+      this.setState({player:{...q,step,round,count:ex.pattern[step][1],scale:ex.pattern[step][2]}});
+    },1000);
+  }
+  closePlayer(){clearInterval(this.timer);this.setState({player:null})}
+  async send(text){
+    text=(text||'').trim();if(!text||this.state.typing)return;
+    const msgs=[...this.state.messages,{role:'user',text}];
+    this.setState({messages:msgs,input:'',typing:true});
+    const wait=ms=>new Promise(r=>setTimeout(r,ms));
+    if(RISK.test(text)){await wait(900);return this.setState(s=>({typing:false,messages:[...s.messages,{role:'bot',text:'I\'m really glad you told me. What you\'re feeling matters, and you deserve support from a real person right now. You don\'t have to go through this alone.',card:{type:'crisis'},sugg:['Help me tell someone','Stay with me for a minute']}]}));}
+    const r=respond(text);let reply=r.text;
+    try{
+      if(window.claude&&window.claude.complete){
+        const hist=msgs.slice(-6).map(m=>(m.role==='user'?'Athlete: ':'Halftime: ')+m.text).join('\n');
+        const out=await Promise.race([window.claude.complete(`You are Halftime AI, a supportive mental-skills assistant in an app for high school athletes. Your tone is calm, gentle and reassuring, like a thoughtful sport psychologist. Validate feelings first, then offer one or two practical, evidence-informed suggestions. Never diagnose. No emojis, no markdown, no lists. Reply in under 60 words.${r.card&&r.card.type!=='crisis'?' The app will show a relevant '+r.card.type+' card below your reply, so you may reference it briefly.':''}\n\n${hist}\nHalftime:`),wait(9000).then(()=>null)]);
+        if(out&&typeof out==='string'&&out.trim())reply=out.trim().replace(/^Halftime:\s*/,'');
+      } else await wait(900);
+    }catch(e){await wait(300)}
+    this.setState(s=>({typing:false,messages:[...s.messages,{role:'bot',text:reply,card:r.card,sugg:r.sugg}]}));
+  }
+  chatWith(text){this.setState({tab:'chat',view:null},()=>this.send(text))}
+  submitUpload(){
+    const u=this.state.up;
+    if(u.title.trim().length<4||u.body.trim().length<40)return this.setState({upTried:true});
+    this.setState(s=>({uploadDone:true,myStories:[{title:u.title.trim()},...s.myStories]}));
+  }
+  renderVals(){
+    const s=this.state,ink='#17191B',mut='#5E6266',acc='oklch(0.55 0.11 200)';
+    const setUp=(k,v)=>this.setState(st=>({up:{...st.up,[k]:v}}));
+    const tabDefs=[['home','Home','50%','0deg'],['chat','Chat','50% 50% 50% 4px','0deg'],['train','Train','4px','45deg'],['learn','Learn','4px','0deg'],['stories','Stories','50% 50% 4px 4px','0deg']];
+    const exCard=id=>EXERCISES.find(e=>e.id===id);
+    const pb=s.view&&s.view.type==='playbook'?PLAYBOOKS.find(p=>p.id===s.view.id):null;
+    const art=s.view&&s.view.type==='article'?ARTICLES.find(a=>a.id===s.view.id):null;
+    const st=s.view&&s.view.type==='story'?STORIES.find(a=>a.id===s.view.id):null;
+    const sit=s.view&&s.view.type==='situation'?SITUATIONS.find(x=>x.id===s.view.id):null;
+    const exRow=e=>{const d=!!(s.completed||{})[e.id];return {...e,done:d,notDone:!d,tileBg:d?acc:'oklch(0.94 0.03 200)',tileFg:d?'#fff':'oklch(0.42 0.11 200)',tileText:d?'✓':`${e.mins}m`,tileSize:d?'18px':'12px',onStart:()=>this.startEx(e.id)}};
+    const planItems=[['p1','Morning check-in','Done at 7:40am'],['p2','Box breathing · 4 min','Suggested for game day'],['p3','Read: Why your heart pounds before games','4 min read']];
+    const last=s.messages[s.messages.length-1];
+    const P=s.player,PE=P&&exCard(P.id);
+    const u=s.up,tErr=s.upTried&&u.title.trim().length<4,bErr=s.upTried&&u.body.trim().length<40;
+    const mr=s.mood&&MOOD_REPLY[s.mood];
+    const android=(this.props.platform??'iOS')==='Android';
+    const cOk=!!(s.agree.a&&s.agree.b);
+    return {
+      needsConsent:!s.consented,
+      consentPoints:[{h:'Not a therapist',b:'Halftime offers wellness tools and education. It is not therapy, medical care or a crisis service, and it cannot diagnose or treat any condition.'},{h:'AI can make mistakes',b:'Halftime AI is automated. Its suggestions may be wrong or not right for you. Use your judgment and check with a trusted adult.'},{h:'In an emergency',b:'Call 911, or call or text 988 to reach the Suicide & Crisis Lifeline. Halftime does not monitor chats in real time.'},{h:'Your privacy',b:'Chats and check-ins stay private to you. Coaches and schools cannot see them. See the Privacy Policy for details.'}],
+      consentChecks:[['a','I understand Halftime is not a substitute for professional mental health care.'],['b','I am 13 or older, and if I am under 18 a parent or guardian knows I use this app.']].map(([k,label])=>{const on=!!s.agree[k];return {label,mark:on?'✓':'',bg:on?acc:'transparent',border:on?acc:'rgba(23,25,27,.3)',onClick:()=>this.setState(x=>({agree:{...x.agree,[k]:!x.agree[k]}}))}}),
+      consentBg:cOk?'#17191B':'rgba(23,25,27,.25)',consentCursor:cOk?'pointer':'not-allowed',
+      acceptConsent:()=>{if(cOk)this.setState({consented:true})},
+      deviceName:android?'AndroidDevice':'IOSDevice',screenH:android?'866px':'874px',shiftTop:android?'-54px':'0px',
+      scrollRef:this.scrollRef,chatRef:this.chatRef,
+      isHome:s.tab==='home',isChat:s.tab==='chat',isTrain:s.tab==='train',isLearn:s.tab==='learn',isStories:s.tab==='stories',
+      
+      tabs:tabDefs.map(([id,label,radius,rot])=>({label,radius,rot:`rotate(${rot}) scale(${rot==='45deg'?.8:1})`,onClick:()=>this.go(id),color:s.tab===id?ink:'#8A8E92',fill:s.tab===id?acc:'transparent'})),
+      moods:MOODS.map(([label,dot])=>{const on=s.mood===label;return {label,dot,size:on?'22px':'16px',onClick:()=>this.setState({mood:label}),bg:on?'oklch(0.96 0.02 200)':'#F6F4EF',border:on?acc:'transparent',fg:on?ink:mut}}),
+      hasMood:!!mr,
+      moodReply:mr?{text:mr[0],cta:mr[2],onPrimary:()=>this.startEx(mr[1])}:{},
+      openChatMood:()=>this.chatWith(`I'm feeling ${s.mood.toLowerCase()} today`),
+      plan:planItems.map(([id,label,sub],i)=>{const d=!!s.planDone[id];return {label,sub,divider:i?'1px solid rgba(23,25,27,.07)':'0',check:d?'✓':'',boxBg:d?acc:'transparent',boxBorder:d?acc:'rgba(23,25,27,.25)',deco:d?'line-through':'none',op:d?.5:1,hasLink:id!=='p1',onToggle:()=>this.setState(x=>({planDone:{...x.planDone,[id]:!x.planDone[id]}})),onOpen:()=>{if(id==='p2')this.startEx('box');else if(id==='p3')this.setState(x=>({view:{type:'article',id:'a1'},planDone:{...x.planDone,p3:true}}));else this.setState(x=>({planDone:{...x.planDone,p1:!x.planDone.p1}}))}}}),
+      planProgress:`${planItems.filter(p=>s.planDone[p[0]]).length}/3`,
+      playbooks:PLAYBOOKS.map(p=>({...p,onOpen:()=>this.setState({view:{type:'playbook',id:p.id}})})),
+      featuredStory:{title:STORIES[0].title,byline:STORIES[0].byline,onOpen:()=>this.setState({view:{type:'story',id:'s1'}})},
+      situations:SITUATIONS.map(x=>{const n=x.ex.filter(id=>(s.completed||{})[id]).length;return {...x,meta:n?`${n} of ${x.ex.length} done`:`${x.ex.length} exercises`,metaColor:n?'oklch(0.42 0.11 200)':'#5E6266',onOpen:()=>this.setState({view:{type:'situation',id:x.id}})}}),
+      isSituation:!!sit,
+      sitView:sit?{...sit,meta:`Train · ${sit.ex.length} exercises`,exercises:sit.ex.map(id=>exRow(EXERCISES.find(e=>e.id===id))),onChat:()=>this.chatWith(`Can you help me with this: ${sit.title.toLowerCase()}?`)}:{},
+      exercises:EXERCISES.map(e=>{const d=!!(s.completed||{})[e.id];return {...e,done:d,notDone:!d,tileBg:d?acc:'oklch(0.94 0.03 200)',tileFg:d?'#fff':'oklch(0.42 0.11 200)',tileText:d?'✓':`${e.mins}m`,tileSize:d?'18px':'12px',onStart:()=>this.startEx(e.id)}}),
+      cats:CATS.map(c=>({label:c,onClick:()=>this.setState({learnCat:c}),bg:s.learnCat===c?ink:'#fff',fg:s.learnCat===c?'#fff':ink,border:s.learnCat===c?ink:'rgba(23,25,27,.1)'})),
+      articles:ARTICLES.filter(a=>s.learnCat==='All'||a.cat===s.learnCat).map(a=>({...a,onOpen:()=>this.setState({view:{type:'article',id:a.id}})})),
+      stories:STORIES.map(x=>({...x,likesLabel:`${x.likes+(s.liked[x.id]?1:0)} felt this`,onOpen:()=>this.setState({view:{type:'story',id:x.id}})})),
+      hasMine:s.myStories.length>0,myStories:s.myStories,
+      openUpload:()=>this.setState({uploadOpen:true,uploadDone:false,upTried:false,up:{title:'',body:'',sport:'Soccer',anon:false}}),
+      closeUpload:()=>this.setState({uploadOpen:false}),
+      uploadOpen:s.uploadOpen,uploadDone:s.uploadDone,uploadForm:!s.uploadDone,
+      up:{title:u.title,body:u.body,count:`${u.body.trim().length}`,titleErr:tErr,titleBorder:tErr?'oklch(0.55 0.15 30)':'rgba(23,25,27,.12)',bodyBorder:bErr?'oklch(0.55 0.15 30)':'rgba(23,25,27,.12)',bodyHintColor:bErr?'oklch(0.5 0.15 30)':mut,
+        onTitle:e=>setUp('title',e.target.value),onBody:e=>setUp('body',e.target.value),onAnon:()=>setUp('anon',!u.anon),toggleBg:u.anon?acc:'rgba(23,25,27,.2)',knob:u.anon?'21px':'3px',onSubmit:()=>this.submitUpload(),
+        sports:SPORTS.map(sp=>({label:sp,onClick:()=>setUp('sport',sp),bg:u.sport===sp?ink:'#fff',fg:u.sport===sp?'#fff':ink,border:u.sport===sp?ink:'rgba(23,25,27,.1)'}))},
+      messages:s.messages.map((m,i)=>{
+        const c=m.card||{},ex=c.type==='exercise'&&exCard(c.id),p=c.type==='playbook'&&PLAYBOOKS.find(x=>x.id===c.id),saved=!!s.savedPlans[i];
+        return {text:m.text,isUser:m.role==='user',isBot:m.role==='bot',isPlan:c.type==='plan',isCrisis:c.type==='crisis',isLink:!!(ex||p),
+          planTitle:c.title,steps:(c.steps||[]).map((t,j)=>({n:String(j+1).padStart(2,'0'),text:t})),
+          saveLabel:saved?'✓ Saved to Train':'Save plan',saveBg:saved?acc:ink,onSave:()=>this.setState(x=>({savedPlans:{...x.savedPlans,[i]:true}})),
+          linkKind:ex?`Exercise · ${ex.mins} min`:'Playbook',linkTitle:ex?ex.title:p?p.title:'',
+          onLink:()=>ex?this.startEx(ex.id):this.setState({view:{type:'playbook',id:p.id}})};
+      }),
+      typing:s.typing,
+      typingDots:[0,1,2].map(i=>React.createElement('span',{key:i,style:{width:7,height:7,borderRadius:'50%',background:mut,animation:`dot 1.2s ${i*.15}s infinite`}})),
+      showSuggestions:!s.typing&&last.role==='bot'&&!!last.sugg,
+      suggestions:(last.sugg||[]).map(l=>({label:l,onClick:()=>this.send(l)})),
+      input:s.input,onInput:e=>this.setState({input:e.target.value}),onKey:e=>{if(e.key==='Enter')this.send(s.input)},onSend:()=>this.send(s.input),
+      sendBg:s.input.trim()?acc:'rgba(23,25,27,.2)',
+      openHelp:()=>this.setState({helpOpen:true}),closeHelp:()=>this.setState({helpOpen:false}),stop:e=>e.stopPropagation(),
+      closeView:()=>this.setState({view:null}),
+      isPlaybook:!!pb,isArticle:!!art,isStory:!!st,
+      pbView:pb?{...pb,steps:pb.steps.map(([head,body],i)=>({n:i+1,head,body})),exTitle:exCard(pb.ex).title,onExercise:()=>this.startEx(pb.ex),onChat:()=>this.chatWith(`Can we talk about this: ${pb.title.toLowerCase()}?`)}:{},
+      artView:art||{},
+      storyView:st?{...st,likeLabel:s.liked[st.id]?`✓ You felt this · ${st.likes+1}`:`I felt this · ${st.likes}`,likeBg:s.liked[st.id]?acc:'#fff',likeFg:s.liked[st.id]?'#fff':ink,likeBorder:s.liked[st.id]?acc:'rgba(23,25,27,.12)',onLike:()=>this.setState(x=>({liked:{...x.liked,[st.id]:!x.liked[st.id]}}))}:{},
+      isPlayer:!!P,closePlayer:()=>this.closePlayer(),togglePlayer:()=>this.togglePlayer(),
+      player:P?{title:PE.title,cue:PE.cue,round:Math.min(P.round,PE.rounds),rounds:PE.rounds,phase:P.done?'Done':P.running||P.step||P.round>1?PE.pattern[P.step][0]:'Ready',count:P.done?'✓':P.count,scale:P.scale,transition:`transform ${P.running?PE.pattern[P.step][1]:.6}s ease-in-out`,done:P.done,notDone:!P.done,btn:P.running?'Pause':(P.step||P.round>1?'Resume':'Begin')}:{}
+    };
+  }
+}
+</script>
+</body>
+</html>
