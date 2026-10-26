@@ -1,0 +1,77 @@
+rules_version = '2';
+
+// Halftime security rules.
+// - Each person can read and write only their own saved data.
+// - Anyone signed in can read approved stories; authors can see their own submissions.
+// - New stories always start as "pending". Only moderators (documents in /admins) can approve them.
+// - "I felt this" likes are one document per person, so counts can't be faked.
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    function signedIn() { return request.auth != null; }
+    function isMe(uid) { return signedIn() && request.auth.uid == uid; }
+    function isAdmin() {
+      return signedIn() && exists(/databases/$(database)/documents/admins/$(request.auth.uid));
+    }
+
+    // Profile: users/{uid}
+    match /users/{uid} {
+      allow read, delete: if isMe(uid);
+      allow create, update: if isMe(uid)
+        && request.resource.data.keys().hasOnly(['name', 'email', 'updatedAt'])
+        && request.resource.data.name is string && request.resource.data.name.size() <= 100
+        && request.resource.data.email is string && request.resource.data.email.size() <= 200;
+
+      // Saved app data: plan, chat, prefs
+      match /state/{part} {
+        allow read, delete: if isMe(uid);
+        allow create, update: if isMe(uid) && part in ['plan', 'chat', 'prefs'];
+      }
+    }
+
+    // Stories
+    match /stories/{storyId} {
+      allow read: if signedIn() && (
+        resource.data.status == 'approved'
+        || resource.data.authorUid == request.auth.uid
+        || isAdmin()
+      );
+
+      allow create: if signedIn()
+        && request.resource.data.keys().hasOnly(
+             ['title', 'body', 'sport', 'anon', 'authorUid', 'authorName', 'status', 'createdAt'])
+        && request.resource.data.authorUid == request.auth.uid
+        && request.resource.data.status == 'pending'
+        && request.resource.data.createdAt == request.time
+        && request.resource.data.title is string
+        && request.resource.data.title.size() >= 4 && request.resource.data.title.size() <= 120
+        && request.resource.data.body is string
+        && request.resource.data.body.size() >= 40 && request.resource.data.body.size() <= 5000
+        && request.resource.data.sport is string && request.resource.data.sport.size() <= 30
+        && request.resource.data.anon is bool
+        && request.resource.data.authorName is string && request.resource.data.authorName.size() <= 60;
+
+      // Moderators can only change the review fields.
+      allow update: if isAdmin()
+        && request.resource.data.diff(resource.data).affectedKeys().hasOnly(['status', 'reviewedAt', 'reviewedBy'])
+        && request.resource.data.status in ['pending', 'approved', 'declined'];
+
+      allow delete: if signedIn() && (resource.data.authorUid == request.auth.uid || isAdmin());
+
+      // stories/{storyId}/likes/{uid}
+      match /likes/{uid} {
+        allow read: if signedIn();
+        allow create: if isMe(uid)
+          && request.resource.data.keys().hasOnly(['at', 'uid'])
+          && request.resource.data.uid == uid;
+        allow delete: if isMe(uid);
+      }
+    }
+
+    // Moderators. Add documents here by hand in the Firebase console (document ID = the moderator's user UID).
+    match /admins/{uid} {
+      allow read: if isMe(uid);
+      allow write: if false;
+    }
+  }
+}

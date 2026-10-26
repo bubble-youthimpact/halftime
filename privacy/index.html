@@ -1,0 +1,319 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="claude:viewport-fit-sides" content="cover">
+<title>Halftime Privacy Policy</title>
+<meta name="description" content="What Halftime collects, why, who can see it, and how to delete it.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@500&family=Plus+Jakarta+Sans:wght@400;600;700;800&display=swap">
+<style>
+/* Layout: sticky slim header, single reading column with a sticky "On this page" rail on wide screens. */
+:root{
+  --bg:#F6F4EF; --surface:#FFFFFF; --ink:#17191B; --muted:#5E6266; --line:rgba(23,25,27,.10);
+  --accent:oklch(0.55 0.11 200); --accent-ink:oklch(0.42 0.11 200); --accent-soft:oklch(0.94 0.03 200);
+  --dark:#17191B; --on-dark:#F6F4EF; --on-dark-muted:#B9BCBE; --alert:oklch(0.55 0.15 30);
+  --fill-bg:oklch(0.93 0.06 85); --fill-ink:oklch(0.38 0.08 70);
+  --sans:'Plus Jakarta Sans',system-ui,-apple-system,'Segoe UI',sans-serif;
+  --mono:'JetBrains Mono',ui-monospace,'SFMono-Regular',Menlo,monospace;
+  color-scheme:light;
+}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
+  --bg:#121416; --surface:#1B1E21; --ink:#ECEAE4; --muted:#A3A7AB; --line:rgba(255,255,255,.10);
+  --accent:oklch(0.68 0.1 200); --accent-ink:oklch(0.8 0.09 200); --accent-soft:oklch(0.3 0.04 200);
+  --dark:#23272B; --on-dark:#F6F4EF; --on-dark-muted:#B9BCBE; --alert:oklch(0.62 0.15 30);
+  --fill-bg:oklch(0.36 0.06 80); --fill-ink:oklch(0.92 0.06 85); color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#121416; --surface:#1B1E21; --ink:#ECEAE4; --muted:#A3A7AB; --line:rgba(255,255,255,.10);
+  --accent:oklch(0.68 0.1 200); --accent-ink:oklch(0.8 0.09 200); --accent-soft:oklch(0.3 0.04 200);
+  --dark:#23272B; --on-dark:#F6F4EF; --on-dark-muted:#B9BCBE; --alert:oklch(0.62 0.15 30);
+  --fill-bg:oklch(0.36 0.06 80); --fill-ink:oklch(0.92 0.06 85); color-scheme:dark}
+*{box-sizing:border-box}
+[hidden]{display:none!important}
+html{-webkit-text-size-adjust:100%}
+body{margin:0;background:var(--bg);color:var(--ink);font:400 16px/1.65 var(--sans);
+  padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:30;background:var(--bg)}
+a{color:var(--accent-ink);text-underline-offset:3px}
+a:hover{color:var(--accent)}
+:focus-visible{outline:2px solid var(--accent);outline-offset:3px;border-radius:6px}
+.wrap{max-width:1080px;margin:0 auto;padding-left:max(20px,env(safe-area-inset-left,0px));padding-right:max(20px,env(safe-area-inset-right,0px))}
+
+/* Header */
+.top{position:sticky;top:env(safe-area-inset-top,0px);z-index:20;background:color-mix(in oklab,var(--bg) 92%,transparent);
+  backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);border-bottom:1px solid var(--line)}
+.top .wrap{display:flex;align-items:center;justify-content:space-between;gap:16px;height:64px}
+.brand{display:flex;align-items:center;gap:10px;color:var(--ink);text-decoration:none;font-weight:800;font-size:19px;letter-spacing:-.02em}
+.brand:hover{color:var(--ink)}
+.mark{width:30px;height:30px;border-radius:9px;background:var(--dark);display:grid;place-items:center;flex:none}
+.mark::after{content:"";width:12px;height:12px;border-radius:50%;background:oklch(0.62 0.11 200)}
+.nav{display:flex;align-items:center;gap:4px}
+.nav a{color:var(--muted);text-decoration:none;font-size:14px;font-weight:600;padding:8px 12px;border-radius:999px}
+.nav a:hover{color:var(--ink);background:var(--line)}
+.nav a[aria-current="page"]{color:var(--ink);background:var(--surface);box-shadow:inset 0 0 0 1px var(--line)}
+.nav .cta{background:var(--ink);color:var(--bg);margin-left:8px}
+.nav .cta:hover{background:var(--ink);color:var(--bg);opacity:.88}
+.menu-btn{display:none;width:42px;height:42px;border-radius:50%;border:1px solid var(--line);background:var(--surface);
+  color:var(--ink);cursor:pointer;align-items:center;justify-content:center}
+.menu-btn svg{width:18px;height:18px}
+
+/* Full-screen mobile menu */
+.sheet{position:fixed;inset:0;z-index:40;background:var(--bg);display:flex;flex-direction:column;
+  padding:env(safe-area-inset-top,0px) max(20px,env(safe-area-inset-right,0px)) env(safe-area-inset-bottom,0px) max(20px,env(safe-area-inset-left,0px))}
+.sheet-top{display:flex;align-items:center;justify-content:space-between;height:64px}
+.close{width:42px;height:42px;border-radius:50%;border:1px solid var(--line);background:var(--surface);color:var(--ink);
+  cursor:pointer;display:flex;align-items:center;justify-content:center}
+.close svg{width:16px;height:16px}
+.sheet-links{list-style:none;margin:16px 0 0;padding:0}
+.sheet-links a{display:flex;align-items:center;justify-content:space-between;gap:16px;padding:20px 2px;
+  border-bottom:1px solid var(--line);color:var(--ink);text-decoration:none;font-size:24px;font-weight:700;letter-spacing:-.02em}
+.sheet-links a svg{width:22px;height:22px;color:var(--muted);flex:none}
+.sheet-links a[aria-current="page"]{color:var(--accent-ink)}
+
+/* Document */
+.doc-head{padding-block:56px 32px;display:flex;flex-direction:column;gap:14px;max-width:760px}
+.eyebrow{font:500 12px/1 var(--mono);letter-spacing:.1em;text-transform:uppercase;color:var(--accent-ink)}
+h1{margin:0;font-size:clamp(38px,6vw,60px);line-height:1.02;letter-spacing:-.035em;font-weight:800;text-wrap:balance}
+.lede{margin:0;font-size:18px;line-height:1.55;color:var(--muted);max-width:60ch;text-wrap:pretty}
+.meta{display:flex;flex-wrap:wrap;gap:8px 16px;font:500 12.5px/1.4 var(--mono);color:var(--muted)}
+.layout{display:grid;grid-template-columns:220px minmax(0,1fr);gap:56px;padding-block:8px 80px;align-items:start}
+.toc{position:sticky;top:calc(env(safe-area-inset-top,0px) + 88px);display:flex;flex-direction:column;gap:2px}
+.toc-label{font:500 11px/1 var(--mono);letter-spacing:.1em;text-transform:uppercase;color:var(--muted);padding:0 0 12px 12px}
+.toc button{all:unset;cursor:pointer;font-size:13.5px;line-height:1.35;font-weight:600;color:var(--muted);padding:7px 12px;border-radius:10px;border-left:2px solid transparent}
+.toc button:hover{color:var(--ink);background:var(--line)}
+.toc button.on{color:var(--ink);border-left-color:var(--accent);border-radius:0 10px 10px 0}
+.toc button:focus-visible{outline:2px solid var(--accent)}
+.body{min-width:0;max-width:68ch;display:flex;flex-direction:column;gap:44px}
+.body section{display:flex;flex-direction:column;gap:14px;scroll-margin-top:96px}
+.body h2{margin:0;font-size:24px;line-height:1.2;letter-spacing:-.02em;font-weight:800;text-wrap:balance}
+.body h3{margin:6px 0 0;font-size:16px;font-weight:700}
+.body p{margin:0;text-wrap:pretty}
+.body ul{margin:0;padding:0;list-style:none;display:flex;flex-direction:column;gap:10px}
+.body li{position:relative;padding-left:22px;text-wrap:pretty}
+.body li::before{content:"";position:absolute;left:3px;top:.62em;width:7px;height:7px;border-radius:50%;background:var(--accent)}
+.body strong{font-weight:700}
+.summary{background:var(--dark);color:var(--on-dark);border-radius:24px;padding:28px}
+.summary h2{font:500 12px/1 var(--mono);letter-spacing:.1em;text-transform:uppercase;color:oklch(0.8 0.09 200)}
+.summary li{color:var(--on-dark);font-size:16.5px}
+.summary li::before{background:oklch(0.72 0.1 200)}
+.fill{background:var(--fill-bg);color:var(--fill-ink);border-radius:5px;padding:1px 5px;font-weight:600;
+  box-decoration-break:clone;-webkit-box-decoration-break:clone}
+.crisis{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:12px;background:var(--surface);
+  border:1px solid var(--line);border-radius:18px;padding:16px 18px;font-size:14.5px;line-height:1.5}
+.crisis strong{color:var(--alert)}
+
+/* Footer */
+.foot{border-top:1px solid var(--line)}
+.foot .wrap{display:flex;flex-wrap:wrap;gap:16px 32px;justify-content:space-between;align-items:center;padding-block:28px}
+.foot nav{display:flex;flex-wrap:wrap;gap:6px 20px}
+.foot a{color:var(--muted);text-decoration:none;font-size:13.5px;font-weight:600}
+.foot a:hover{color:var(--ink)}
+.foot small{color:var(--muted);font-size:13px}
+
+/* 404 */
+.lost{padding-block:96px 120px;display:flex;flex-direction:column;gap:18px;max-width:640px}
+.code{font:500 13px/1 var(--mono);letter-spacing:.1em;color:var(--accent-ink)}
+.actions{display:flex;flex-wrap:wrap;gap:10px;padding-top:8px}
+.btn{display:inline-flex;align-items:center;gap:8px;border-radius:999px;padding:12px 20px;font-weight:700;font-size:15px;text-decoration:none}
+.btn.primary{background:var(--ink);color:var(--bg)}
+.btn.primary:hover{color:var(--bg);opacity:.88}
+.btn.ghost{border:1px solid var(--line);color:var(--ink);background:var(--surface)}
+.btn.ghost:hover{color:var(--ink);border-color:var(--muted)}
+
+@media (max-width:860px){
+  .nav{display:none}
+  .menu-btn{display:flex}
+  .layout{grid-template-columns:minmax(0,1fr);gap:0}
+  .toc{display:none}
+  .doc-head{padding-block:36px 24px}
+  .lede{font-size:17px}
+  .summary{padding:22px;border-radius:20px}
+  .body{gap:36px}
+}
+@media (prefers-reduced-motion:no-preference){html{scroll-behavior:smooth}}
+</style>
+</head>
+<body>
+<header class="top"><div class="wrap">
+  <a class="brand" href="../" aria-label="Halftime home"><span class="mark"></span>Halftime</a>
+  <nav class="nav" aria-label="Main"><a href="../privacy/" aria-current="page">Privacy Policy</a><a href="../terms/">Terms of Use</a><a href="../community-guidelines/">Guidelines</a><a class="cta" href="../">Open the app</a></nav>
+  <button class="menu-btn" id="menu-open" aria-label="Open menu" aria-controls="menu"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h16"/></svg></button>
+</div></header>
+<div class="sheet" id="menu" role="dialog" aria-modal="true" aria-label="Menu" hidden>
+  <div class="sheet-top">
+    <a class="brand" href="../"><span class="mark"></span>Halftime</a>
+    <button class="close" id="menu-close" aria-label="Close menu"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg></button>
+  </div>
+  <ul class="sheet-links"><li><a href="../privacy/" aria-current="page">Privacy Policy<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a></li><li><a href="../terms/">Terms of Use<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a></li><li><a href="../community-guidelines/">Community Guidelines<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a></li><li><a href="../">Open the app<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a></li></ul>
+</div>
+<main class="wrap">
+  <div class="doc-head">
+    <div class="eyebrow">Halftime · Legal</div>
+    <h1>Privacy Policy</h1>
+    <p class="lede">What Halftime collects, why, who can see it, and how to delete it.</p>
+    <div class="meta"><span>Last updated October 26, 2026</span><span>6 min read</span></div>
+  </div>
+  <div class="layout">
+    <aside class="toc" aria-label="On this page"><div class="toc-label">On this page</div><button type="button" data-target="who-we-are">Who we are</button><button type="button" data-target="what-we-collect">Information we collect</button><button type="button" data-target="sensitive-information">Wellbeing information</button><button type="button" data-target="how-we-use">How we use your information</button><button type="button" data-target="halftime-ai">Halftime AI</button><button type="button" data-target="sharing">How we share information</button><button type="button" data-target="teens">Teens and children</button><button type="button" data-target="storage-security">Storage and security</button><button type="button" data-target="retention">How long we keep information</button><button type="button" data-target="your-choices">Your choices and rights</button><button type="button" data-target="changes">Changes to this policy</button><button type="button" data-target="contact">Contact us</button></aside>
+    <article class="body">
+<section class="summary" aria-label="Summary">
+<h2>The short version</h2>
+<ul>
+<li>Your check-ins, chats and progress are private to you. Coaches, teams, schools and other users cannot see them.</li>
+<li>We do not sell your personal information, and we do not show ads.</li>
+<li>Halftime AI replies come from responses written into the app. Your chats are not sent to any outside AI company.</li>
+<li>You must be 13 or older to use Halftime.</li>
+<li>You can download or delete your data at any time. Deleting your account in the app removes it.</li>
+</ul>
+</section>
+
+<section id="who-we-are">
+<h2>Who we are</h2>
+<p>Halftime is a wellness and education app that helps high school athletes build mental skills. Halftime is operated by <span class="fill">[Operator legal name]</span> ("Halftime", "we", "us"). This Privacy Policy explains what information we collect when you use the Halftime app and website, how we use it, who we share it with, and the choices you have.</p>
+<p>If you have a question about this policy, contact us at <span class="fill">[Contact email]</span>.</p>
+</section>
+
+<section id="what-we-collect">
+<h2>Information we collect</h2>
+<h3>Information you give us</h3>
+<ul>
+<li><strong>Account details.</strong> Your first name, email address and password when you create an account with email. Passwords are handled by our sign-in provider and are never visible to us.</li>
+<li><strong>Google sign-in.</strong> If you continue with Google, Google shares your name, email address and profile picture with us. We do not receive your Google password.</li>
+<li><strong>Check-ins.</strong> The moods you select, such as "Tense" or "Locked in", and when you select them.</li>
+<li><strong>Chats with Halftime AI.</strong> The messages you send and the replies you receive.</li>
+<li><strong>Training activity.</strong> Exercises you start and finish, plans you save, and items you check off in Today's plan.</li>
+<li><strong>Stories.</strong> The title, text and sport of any story you submit, and whether you chose to post anonymously. We also record the stories you mark "I felt this".</li>
+<li><strong>Agreements.</strong> That you confirmed you are 13 or older and that you understand Halftime is not a substitute for professional care.</li>
+<li><strong>Messages to us.</strong> Anything you send when you contact support.</li>
+</ul>
+<h3>Information collected automatically</h3>
+<ul>
+<li><strong>Device and app information.</strong> Device type, operating system, app version, language and time zone.</li>
+<li><strong>Usage and diagnostics.</strong> Which screens you open, crash reports and error logs, and your IP address, which we use for security and to keep the service working.</li>
+</ul>
+<p>We do not collect your precise location, your contacts or your health records, and we do not access your camera or microphone.</p>
+</section>
+
+<section id="sensitive-information">
+<h2>Wellbeing information</h2>
+<p>Your check-ins, chats and stories can describe how you are feeling. We treat this as sensitive information. We use it only to run the features you ask for, to keep you safe, and to keep Halftime working. We never use it for advertising, and we never share it with your coach, team, school or parents.</p>
+</section>
+
+<section id="how-we-use">
+<h2>How we use your information</h2>
+<ul>
+<li><strong>To run Halftime.</strong> To create your account, sign you in, save your progress and show you exercises, playbooks and articles that fit what you tell us.</li>
+<li><strong>To reply in chat.</strong> To choose a Halftime AI response, exercise or playbook that fits your message.</li>
+<li><strong>To keep you safe.</strong> Halftime automatically checks chat messages for words that can signal a crisis, such as thoughts of self-harm, and shows crisis resources when it finds them. No person reads your chats in real time, and Halftime does not contact emergency services for you.</li>
+<li><strong>To review stories.</strong> A Halftime moderator reads every story before it is published.</li>
+<li><strong>To communicate with you.</strong> To send messages about your account, such as password reset emails, and, if you turn them on, reminders such as a game-day exercise.</li>
+<li><strong>To improve Halftime.</strong> To fix bugs and understand which features are used, using aggregated or de-identified information wherever possible.</li>
+<li><strong>To protect Halftime and follow the law.</strong> To prevent misuse, enforce our <a href="../terms/">Terms of Use</a> and meet legal obligations.</li>
+</ul>
+<p>We do not use your chats, check-ins or stories to train AI models.</p>
+</section>
+
+<section id="halftime-ai">
+<h2>Halftime AI</h2>
+<p>Halftime AI picks its replies, exercises and playbooks from responses written into the app, based on the words in your message. Your chats stay in your Halftime account and are not sent to any outside AI company. If we ever add an outside AI service, we will update this policy and tell you in the app before it starts.</p>
+<p>Halftime AI is automated and can be wrong. It is not a therapist, doctor or crisis counselor.</p>
+</section>
+
+<section id="sharing">
+<h2>How we share information</h2>
+<p>We do not sell your personal information, and we do not share it for targeted advertising. We share information only in these cases:</p>
+<ul>
+<li><strong>Service providers.</strong> Companies that run parts of Halftime for us under contract: Google Firebase for sign-in and data storage; GitHub for hosting the website; and providers for email delivery and crash reporting. They may use your information only to provide their service to us.</li>
+<li><strong>Published stories.</strong> Once approved, a story is visible to everyone who uses Halftime. A named story shows your first name and sport. An anonymous story shows only your sport.</li>
+<li><strong>Safety and the law.</strong> When we believe in good faith that disclosure is needed to comply with the law or a valid legal request, or to protect someone from serious harm.</li>
+<li><strong>Business changes.</strong> If Halftime is merged, acquired or transferred, your information may move to the new owner, who must continue to protect it as this policy describes.</li>
+<li><strong>With your permission.</strong> In any other case, only if you ask us to.</li>
+</ul>
+</section>
+
+<section id="teens">
+<h2>Teens and children</h2>
+<p>Halftime is made for athletes aged 13 to 18 and is not intended for children under 13. You must confirm that you are 13 or older before using Halftime. If we learn that we have collected personal information from a child under 13, we will delete it.</p>
+<p>If you are under 18, a parent or guardian should know that you use Halftime. A parent or guardian may contact us at <span class="fill">[Contact email]</span> to ask what information we hold about their teen or to request that it be deleted. We will verify the request before acting on it. We do not show parents the content of a teen's chats or check-ins unless the law requires it.</p>
+</section>
+
+<section id="storage-security">
+<h2>Storage and security</h2>
+<p>Your information is stored on Google Cloud servers operated for Firebase, which may be located in the United States or other countries. Halftime is operated from <span class="fill">[Country]</span>, so your information may be processed outside the country where you live. Where the law requires it, we use appropriate safeguards for these transfers.</p>
+<p>We encrypt information in transit, limit access to people who need it to run Halftime, and use the security features of our providers. No system is perfectly secure, so please use a strong password and keep it private.</p>
+</section>
+
+<section id="retention">
+<h2>How long we keep information</h2>
+<ul>
+<li>We keep your account information for as long as your account is open.</li>
+<li>When you delete your account, we delete your personal information, including chats, check-ins, training activity and stories, within 30 days. Copies in backups are erased within a further 60 days.</li>
+<li>Crash reports and security logs are kept for up to 12 months.</li>
+<li>We may keep limited information longer when the law requires it or to resolve a dispute.</li>
+</ul>
+</section>
+
+<section id="your-choices">
+<h2>Your choices and rights</h2>
+<ul>
+<li><strong>Access and download.</strong> Ask for a copy of the information we hold about you.</li>
+<li><strong>Correct.</strong> Update your name and email in the app, or ask us to correct other information.</li>
+<li><strong>Delete.</strong> Delete your account in the app by tapping your profile picture on Home, then <em>Delete account</em>. You can also email us.</li>
+<li><strong>Withdraw a story.</strong> Ask us to remove a story you submitted at any time.</li>
+<li><strong>Notifications.</strong> Turn reminders on or off in your device settings.</li>
+</ul>
+<p>Depending on where you live, you may have additional rights, for example under the EU and UK General Data Protection Regulation, the California Consumer Privacy Act, or Korea's Personal Information Protection Act. These can include the right to object to or restrict certain processing, the right to data portability, and the right to complain to your local data protection authority. Where we rely on your consent, you can withdraw it at any time. We will not treat you differently for using any of these rights.</p>
+<p>To make a request, email <span class="fill">[Contact email]</span>. We will reply within 30 days.</p>
+</section>
+
+<section id="changes">
+<h2>Changes to this policy</h2>
+<p>We may update this policy as Halftime changes. If we make a significant change, we will tell you in the app before it takes effect. The date at the top of this page shows when it was last updated.</p>
+</section>
+
+<section id="contact">
+<h2>Contact us</h2>
+<p><span class="fill">[Operator legal name]</span><br>Email: <span class="fill">[Contact email]</span><br>Address: <span class="fill">[Mailing address]</span></p>
+</section>
+
+      <div class="crisis"><span><strong>Need help right now?</strong> In the U.S., call or text 988, or call 911 in an emergency.</span></div>
+    </article>
+  </div>
+</main>
+<footer class="foot"><div class="wrap">
+  <nav aria-label="Legal"><a href="../privacy/">Privacy Policy</a><a href="../terms/">Terms of Use</a><a href="../community-guidelines/">Community Guidelines</a></nav>
+  <small>© 2026 Halftime · Not a crisis service. In an emergency, call 911 or call or text 988.</small>
+</div></footer>
+
+<script>
+(function(){
+  var sheet=document.getElementById('menu'),open=document.getElementById('menu-open'),close=document.getElementById('menu-close');
+  function setMenu(on){sheet.hidden=!on;document.body.style.overflow=on?'hidden':'';(on?close:open).focus();}
+  open.addEventListener('click',function(){setMenu(true)});
+  close.addEventListener('click',function(){setMenu(false)});
+  document.addEventListener('keydown',function(e){if(e.key==='Escape'&&!sheet.hidden)setMenu(false)});
+  if(/claude/.test(location.hostname)){
+    document.querySelectorAll('a[href]').forEach(function(a){
+      var h=a.getAttribute('href');
+      if(!/^[a-z]+:|^\/\/|^#/.test(h)&&/\/$/.test(h))a.setAttribute('href',h+'index.html');
+    });
+  }
+  var toc=document.querySelectorAll('.toc button');
+  if(toc.length){
+    toc.forEach(function(b){b.addEventListener('click',function(){
+      var t=document.getElementById(b.dataset.target);if(t)t.scrollIntoView({block:'start'});
+    })});
+    var secs=[].map.call(toc,function(b){return document.getElementById(b.dataset.target)});
+    function spy(){
+      var cur=0;
+      secs.forEach(function(s,i){if(s&&s.getBoundingClientRect().top<=130)cur=i});
+      toc.forEach(function(b,i){b.classList.toggle('on',i===cur)});
+    }
+    window.addEventListener('scroll',spy,{passive:true});spy();
+  }
+})();
+</script>
+</body>
+</html>
