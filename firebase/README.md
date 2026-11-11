@@ -45,7 +45,7 @@ Halftime AI section of the Privacy Policy.
 | `users/{uid}` | name, email | that person |
 | `users/{uid}/state/plan` | today's plan, mood, finished exercises | that person |
 | `users/{uid}/state/chat` | recent chat messages | that person |
-| `users/{uid}/state/prefs` | stories they liked | that person |
+| `users/{uid}/state/prefs` | stories they liked, Learn articles they've read, Good Things Bank entries | that person |
 | `stories/{id}` | submitted stories and their review status | everyone signed in, once approved; the author; moderators |
 | `stories/{id}/likes/{uid}` | one "I felt this" per person | everyone signed in |
 | `admins/{uid}` | moderators (added by hand) | that moderator |
